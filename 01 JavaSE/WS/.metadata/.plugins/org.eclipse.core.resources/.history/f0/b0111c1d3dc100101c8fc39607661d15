@@ -1,0 +1,30 @@
+package com.cts.javasedemo.ui;
+
+import java.util.function.BinaryOperator;
+
+public class FunctionalInterfaceDemo {
+
+	public static void main(String[] args) {
+		
+		BinaryOperator<Integer> sum = (a,b) -> a+b;
+		System.out.println(sum.apply(123, 456));
+		
+		/*
+		 class Sum implements BinaryOperator<Integer> {
+		 	public Integer apply(Integer a, Integer b){
+		 		return a+b;
+		 	}
+		 }
+		 
+		 Sum sum = new Sum();
+		 System.out.println(sum.apply(123, 456));
+		 * */
+
+		BinaryOperator<Employee> maxSalOf = (e1,e2) -> {
+			Employee result = null;
+			
+		}
+		
+	}
+
+}

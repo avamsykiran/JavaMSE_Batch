@@ -352,6 +352,7 @@ Collections
            Map (interface)              represents a collection of key-value
             |                           put,set,get,keySet,valueSet,containsKey,containsValue,size
             |
+            |<- class Hashtable         order of retrival is non-pridictable and synchronized (legecy)
             |<- class HashMap           order of retrival is non-pridictable
             |<- class LinkedHashMap     order of retrival is entry-pridictable
             |<- class TreeMap           order of retrival is sorted-pridictable
@@ -428,4 +429,97 @@ Collections
             Database    <----->     APP     <------>    EndUsers
 
             Database    <----->[ DAO --(model)--- Service --(model)---- UI ]]<------>    EndUsers
+
+    Funtional Interfaces and Lambda Expressions and Method Referencing and Streams API
+    ----------------------------------------------------------------------------------------
+
+        Functional interface are thos that have exactly one abstract emthod.
+
+            @FuntionlInterface annotation is used for compiler-check.
+
+            java.util.function  offers a list of functional interfaces. 
+                
+                Supplier       that the method of this functional interface has no-args but returns a value
+                Consumer       that the method of this functional interface has args but no return value
+                Operator       that the method of this functional interface has args and returns a value
+                Predicate      that the method of this functional interface returns boolean 
+
+            Functional interface are introduced to promote functional programming in java.
+
+            Functional programming allows to design a process as a chain of steps, where the output of
+            one step will be input for the next step. Amd this is achived through chaining function calls.
+
+            process ------> datasource.step1().step2().step3()
+
+            this needs that we may have to pass one function as a param to another function. functional interfaces allows us to achive this.
+
+            dataSourceOfEmployees
+                .step1( anOperation )
+                .step2( anotherOperation )
+
+                operations are themselves are functions.
+
+            Functional interfaces can be implemented using a inline-function-syntax called Lambda Expressions.
+
+            FunctionInterface obj = (paramsList) -> returnValueExpression
+            FunctionInterface obj = (paramsList) -> {
+                //an implementation
+                retrun value;
+            }
+
+        Method Referencing
+
+            allows an object of functional interface to refer to any method whose signature matches
+            with the signature of the method in the functional interface.
+
+            interface Dummy {
+                void doThis(Object);
+            }        
+
+            Dummy d = System.out::println ; // :: is scope resolution operator
+            d.doThis("HGello"); // is same as System.out.priontln("Hello");
+
+        Stream API
+
+            Stream means flow of data.
+
+            java.util.stream
+                        |- Stream<T>
+                        |- IntStream
+                        |- FloatStream
+                        |- DoubleStream
+                            ....etc.,
+
+
+            Stream s1 = Stream.of(val1,val2,val3,.....);
+            Stream s2 = list.stream();
+            Stream s3 = set.stream();
+            Stream s4 = Arrays.stream(array);
+
+            Terminal Operations
+                are methods of Stream class that do not return a new Stream
+
+                forEach(consumer)       executes the consumer on each and every element of the stream
+
+                reduce(BinaryOperator)  executes the binary-operator cumilatively on all the elements of the stream
+                                        returns the final result wrapped inside Optional class.
+
+                                        java.util.Optional class is used to wrap a value or a null.
+
+                    String<Integer> s1 = Stream.of(10,20,30,40,50);
+                    BinaryOperator<Integer> sum =  (a,b) -> a+b ;
+                    Optional<Integer> result = s1.reduce(sum); // sum(sum(sum(sum(10,20),30),40),50), so resutl is 150
+
+                collect(Collector)      Collector is an interface in java.util.stream that is used to read data
+                                        from a stream and write it into any other data-source.
+
+                                        Collectors.toSet()      returns an object Collector that can write into a set
+                                        Collectors.toList()     returns an object Collector that can write into a list
+
+                                        collect function takes a Collecotr and used it to convert a stream into a list
+                                        or a set or any other data-source as per the Collector
+
+            Intermdiate Operations
+                are methods of Stream class that a new Stream
+            
 

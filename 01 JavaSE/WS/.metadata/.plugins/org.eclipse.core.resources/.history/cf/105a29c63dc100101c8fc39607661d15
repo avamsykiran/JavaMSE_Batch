@@ -1,0 +1,45 @@
+package com.cts.javasedemo.ui;
+
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.function.BinaryOperator;
+
+import com.cts.javasedemo.models.Employee;
+
+public class FunctionalInterfaceDemo {
+
+	public static void main(String[] args) {
+		
+		BinaryOperator<Integer> sum = (a,b) -> a+b;
+		System.out.println(sum.apply(123, 456));
+		
+		/*
+		 class Sum implements BinaryOperator<Integer> {
+		 	public Integer apply(Integer a, Integer b){
+		 		return a+b;
+		 	}
+		 }
+		 
+		 Sum sum = new Sum();
+		 System.out.println(sum.apply(123, 456));
+		 * */
+
+		BinaryOperator<Employee> maxSalOf = (e1,e2) -> {
+			Employee result = null;
+			
+			if(e1.getSalary()>e2.getSalary()) {
+				result = e1;
+			}else {
+				result = e2;
+			}
+			
+			return result;
+		};
+		
+		System.out.println(maxSalOf.apply(
+				new Employee(10, "Vamsy", 45000, LocalDate.of(2021, Month.MARCH, 10)), 
+				new Employee(9, "Vasundhara", 85000, LocalDate.of(2021, Month.MARCH, 21))));
+		
+	}
+
+}

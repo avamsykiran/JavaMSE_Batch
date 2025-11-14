@@ -1,0 +1,44 @@
+package com.cts.javasedemo.ui;
+
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import com.cts.javasedemo.models.Employee;
+import com.cts.javasedemo.service.EmployeeFullNameComparator;
+
+public class StreamsAPIDemo {
+	public static void main(String a[]) {
+		List<Employee> emps = new ArrayList<>();
+		
+		emps.add(new Employee(10, "Vamsy", 45000, LocalDate.of(2021, Month.MARCH, 10)));		
+		emps.add(new Employee(1, "Varun", 50000, LocalDate.of(2021, Month.MARCH, 1)));
+		emps.add(new Employee(4, "Vasanth", 55000, LocalDate.of(2021, Month.MARCH, 20)));
+		emps.add(new Employee(2, "Vijay", 35000, LocalDate.of(2021, Month.MARCH, 5)));
+		emps.add(new Employee(7, "Varma", 25000, LocalDate.of(2021, Month.MARCH, 6)));
+		emps.add(new Employee(3, "Vasavi", 145000, LocalDate.of(2021, Month.MARCH, 7)));
+		emps.add(new Employee(9, "Vasundhara", 85000, LocalDate.of(2021, Month.MARCH, 21)));
+	
+		emps.stream().forEach(System.out::println);
+		
+		System.out.println("-----------------------------------------------------------------");
+		
+		Optional<Employee> result =
+		emps.stream().reduce( (e1,e2) -> e1.getSalary()>e2.getSalary()?e1:e2 );
+		
+		if(result.isPresent()) {
+			System.out.println(result.get());
+		}
+		
+		System.out.println("-----------------------------------------------------------------");
+		Set<Employee> empSet = emps.stream().collect(Collectors.toSet());
+		System.out.println(empSet.getClass());
+		empSet.stream().forEach(System.out::println);
+		
+	}
+}
