@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<title>Spring WebApp</title>
+		<link data-th-href="@{'/css/bootstrap.css'}" rel="stylesheet" />
+		<script data-th-src="@{'/js/bootstrap.js'}"></script>
+	</head>
+	<body>
+	
+		<div data-th-replace="header"></div>
+		
+		<div class="container-fluid p-4">
+			<section class="border border-primary p-4 col-sm-8 mx-auto">
+				<h3>Application Error!</h3>
+				
+				<p>
+					 <strong data-th-text="${errMsg}"></strong>
+				</p>
+				
+				<p>
+					We Regret the Inconvenience caused.
+				</p>
+				
+				
+			</section>
+		</div>
+	</body>
+</html>

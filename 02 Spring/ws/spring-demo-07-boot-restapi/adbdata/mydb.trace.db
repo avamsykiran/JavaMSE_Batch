@@ -1,0 +1,18 @@
+2025-05-27 15:46:20.311950+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONTACTS" not found (this database is empty); SQL statement:
+insert into contacts (date_of_bith,full_name,mail_id,mobile_number,contact_id) values (?,?,?,?,default) [42104-232]
+2025-05-27 15:46:20.363263+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONTACTS" not found (this database is empty); SQL statement:
+select c1_0.contact_id,c1_0.date_of_bith,c1_0.full_name,c1_0.mail_id,c1_0.mobile_number from contacts c1_0 [42104-232]
+2025-05-27 15:46:20.376797+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONTACTS" not found (this database is empty); SQL statement:
+insert into contacts (date_of_bith,full_name,mail_id,mobile_number,contact_id) values (?,?,?,?,default) [42104-232]
+2025-05-27 15:46:20.378665+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONTACTS" not found (this database is empty); SQL statement:
+select c1_0.contact_id,c1_0.date_of_bith,c1_0.full_name,c1_0.mail_id,c1_0.mobile_number from contacts c1_0 [42104-232]
+2025-05-27 15:46:20.384284+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONTACTS" not found (this database is empty); SQL statement:
+insert into contacts (date_of_bith,full_name,mail_id,mobile_number,contact_id) values (?,?,?,?,default) [42104-232]
+2025-05-27 15:46:20.385325+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONTACTS" not found (this database is empty); SQL statement:
+select c1_0.contact_id,c1_0.date_of_bith,c1_0.full_name,c1_0.mail_id,c1_0.mobile_number from contacts c1_0 [42104-232]

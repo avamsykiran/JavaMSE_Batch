@@ -1,0 +1,37 @@
+
+<html>
+	<head>
+		<title>Spring WebApp</title>
+		<link data-th-href="@{'/css/bootstrap.css'}" rel="stylesheet" />
+		<script data-th-src="@{'/js/bootstrap.js'}"></script>
+	</head>
+	<body>
+	
+		<div data-th-replace="header"></div>
+		
+		<div class="container-fluid p-4">
+			<section class="border border-primary p-4 col-sm-8 mx-auto">
+				<h3>Welcome Home!</h3>
+				
+				<p>
+					This is a sample <strong>spring boot dynamic 
+					web application</strong> demonstrating the CRUD
+					operations on 'Contact' Entity
+				</p>
+				
+				<p>
+					ThymeLeaf is used as VIEW engine.
+				</p>
+				
+				<p>
+					Bootstrap 5 is used for styling 
+				</p>
+				
+				<p>
+					Spring Data JPA for Dynamic JPA Repositories and H2DB 
+					for Persistence.
+				</p>
+			</section>
+		</div>
+	</body>
+</html>

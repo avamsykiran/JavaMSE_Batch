@@ -1,0 +1,13 @@
+package com.cts.javasedemo;
+
+import java.time.LocalDate;
+
+public class Employee {
+	private int empId;
+	private String fullName;
+	private double salary;
+	private LocalDate hireDate;
+	
+	
+	
+}

@@ -1,0 +1,46 @@
+<html >
+	<head>
+		<title>Spring WebApp</title>
+		<link data-th-href="@{'/css/bootstrap.css'}" rel="stylesheet" />
+		<script data-th-src="@{'/js/bootstrap.js'}"></script>
+	</head>
+	<body>
+	
+		<div data-th-replace="header"></div>
+		
+		<div class="container-fluid p-4">
+			<section class="border border-primary p-4 col-sm-9 mx-auto">
+				<h3>Contacts List</h3>
+				
+				<table class="table table-bordered table-striped table-hover">
+					<thead>
+						<tr>
+							<th>Contact#</th>
+							<th>Full Name</th>
+							<th>Mobile</th>
+							<th>Mail </th>
+							<th>Date Of Birth</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-th-each="c:${contacts}" data-th-object="${c}">
+							<td data-th-text="*{contactId }"></td>
+							<td data-th-text="*{fullName }"></td>
+							<td data-th-text="*{mobileNumber }"></td>
+							<td data-th-text="*{meilId}"></td>
+							<td data-th-text="*{dateOfBith }"></td>
+							<td>
+								<a class="btn btn-sm btn-secondary" 
+									data-th-href="@{/contacts/edit(cid=*{contactId })}">EDIT</a>
+								<a class="btn btn-sm btn-danger ml-1" 
+									data-th-href="@{/contacts/del(cid=*{contactId })}">DELETE</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+			</section>
+		</div>
+	</body>
+</html>

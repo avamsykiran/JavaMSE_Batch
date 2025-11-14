@@ -1,0 +1,53 @@
+<html>
+	<head>
+		<title>Spring WebApp</title>
+		<link data-th-href="@{'/css/bootstrap.css'}" rel="stylesheet" />
+		<script data-th-src="@{'/js/bootstrap.js'}"></script>
+	</head>
+	<body>
+	
+		<div data-th-replace="header"></div>
+		
+		<div class="container-fluid p-4">
+			<section class="border border-primary p-4 col-sm-4 mx-auto">
+				<h3>Contact Form</h3>
+				
+				<form data-th-object="${contact}" method="POST">
+					<div class="form-group">
+						<label>Contact Id: 
+							<input data-th-field="*{contactId}" class="form-control" readonly />
+						</label>
+					</div>
+					<div class="form-group">
+						<label>Full Name: 
+							<input data-th-field="*{fullName}" class="form-control" />
+						</label>
+						<div data-th-errors="*{fullName}" class="alert alert-danger p-2"></div>
+					</div>
+					<div class="form-group">
+						<label>Mobile Number: 
+							<input data-th-field="*{mobileNumber}" class="form-control" />
+						</label>
+						<div data-th-errors="*{mobileNumber}" class="alert alert-danger p-2"></div>
+					</div>
+					<div class="form-group">
+						<label>Mail Id:
+							<input data-th-field="*{meilId}" class="form-control" />
+						</label>
+						<div data-th-errors="*{meilId}" class="alert alert-danger p-2"></div>
+					</div>
+					<div class="form-group">
+						<label>Date Of Birth:
+							<input type="date" data-th-field="*{dateOfBith}" class="form-control" />
+						</label>
+						<div data-th-errors="*{dateOfBith}" class="alert alert-danger p-2"></div>						
+					</div>
+					<div class="d-grid mt-1">
+						<button class="btn btn-primary">SAVE</button>
+					</div>
+				</form>
+				
+			</section>
+		</div>
+	</body>
+</html>
