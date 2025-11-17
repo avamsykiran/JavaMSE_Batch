@@ -490,7 +490,6 @@ Collections
                         |- DoubleStream
                             ....etc.,
 
-
             Stream s1 = Stream.of(val1,val2,val3,.....);
             Stream s2 = list.stream();
             Stream s3 = set.stream();
@@ -522,4 +521,16 @@ Collections
             Intermdiate Operations
                 are methods of Stream class that a new Stream
             
+                filter(predicate)       this executes the predicate on each element of the existing stream,
+                                        and returns a new stream having only those elements for whom the predicate
+                                        returns true 
+                                        
+                map(operator)           map executes the operator on each element of the stream and returns a new stream having
+                                        the all the results of the operator
+
+                    String<Integer> s1 = Stream.of(10,20,30,40,50);                    
+                    s1.map(x -> x*2) ----------> gives me a stream having 20,40,60,80,100
+
+                flatMap(mapper)         this is going to flatten a clustured or nested collection into a plain stream
+
 

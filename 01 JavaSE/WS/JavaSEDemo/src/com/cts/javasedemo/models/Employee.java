@@ -1,6 +1,7 @@
 package com.cts.javasedemo.models;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class Employee implements Comparable<Employee> {
@@ -8,17 +9,19 @@ public class Employee implements Comparable<Employee> {
 	private String fullName;
 	private double salary;
 	private LocalDate hireDate;
+	private List<String> skills;
 	
 	public Employee() {
 		
 	}
 	
-	public Employee(int empId, String fullName, double salary, LocalDate hireDate) {
+	public Employee(int empId, String fullName, double salary, LocalDate hireDate,List<String> skills) {
 		super();
 		this.empId = empId;
 		this.fullName = fullName;
 		this.salary = salary;
 		this.hireDate = hireDate;
+		this.skills=skills;
 	}
 
 	public int getEmpId() {
@@ -51,11 +54,20 @@ public class Employee implements Comparable<Employee> {
 
 	public void setHireDate(LocalDate hireDate) {
 		this.hireDate = hireDate;
+	}	
+	
+	public List<String> getSkills() {
+		return skills;
 	}
+
+	public void setSkills(List<String> skills) {
+		this.skills = skills;
+	}
+
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(empId, fullName, hireDate, salary);
+		return Objects.hash(empId, fullName, hireDate, salary, skills);
 	}
 
 	@Override
@@ -69,13 +81,14 @@ public class Employee implements Comparable<Employee> {
 		Employee other = (Employee) obj;
 		return empId == other.empId && Objects.equals(fullName, other.fullName)
 				&& Objects.equals(hireDate, other.hireDate)
-				&& Double.doubleToLongBits(salary) == Double.doubleToLongBits(other.salary);
+				&& Double.doubleToLongBits(salary) == Double.doubleToLongBits(other.salary)
+				&& Objects.equals(skills, other.skills);
 	}
-
+		
 	@Override
 	public String toString() {
 		return "Employee [empId=" + empId + ", fullName=" + fullName + ", salary=" + salary + ", hireDate=" + hireDate
-				+ "]";
+				+ ", skills=" + skills + "]";
 	}
 
 	@Override

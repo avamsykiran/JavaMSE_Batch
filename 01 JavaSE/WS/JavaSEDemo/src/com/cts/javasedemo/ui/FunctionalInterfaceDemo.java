@@ -36,9 +36,6 @@ public class FunctionalInterfaceDemo {
 			return result;
 		};
 		
-		System.out.println(maxSalOf.apply(
-				new Employee(10, "Vamsy", 45000, LocalDate.of(2021, Month.MARCH, 10)), 
-				new Employee(9, "Vasundhara", 85000, LocalDate.of(2021, Month.MARCH, 21))));
 		
 	}
 
