@@ -531,6 +531,7 @@ Collections
                     String<Integer> s1 = Stream.of(10,20,30,40,50);                    
                     s1.map(x -> x*2) ----------> gives me a stream having 20,40,60,80,100
 
-                flatMap(mapper)         this is going to flatten a clustured or nested collection into a plain stream
+                flatMap(mapper)         this accepts a clustured or nested stream and is going to flatten it into a plain stream
 
+                    List list = listOfLists.stream().flatMap(List::stream).collect(Collectors.toList());
 
