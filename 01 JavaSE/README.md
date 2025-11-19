@@ -395,41 +395,6 @@ Collections
                 }
             }
 
-
-
-    Mulit-Layer Arch
-
-        POJO        Plain Old Java Object, is any java class
-                    having fields , getters and setters
-
-        An application is divided into multiple layers where
-        each layer has a specific task.
-
-            Models          is any POJO that represents a domain-entity (Student, Employee, ..etc)
-                            - the model must define constructors, setters and getters
-                            - the model must override toString, equals and hashcode methods from Object class
-
-            Entities        is any model that is mapped to a database-table using ORM.
-
-            Services        is any POJO that offers bussiness-logic like computations, validations and any other
-                            domain-specific-algorithms.
-
-            Controllers     is any POJO that offers the flow-control in the app.
-
-            UI              is any POJO that offers user-interface like accepting data ro commands from a 
-                            end-user or displaying info or poutput to the end-user.
-
-            DAO             Data-Access-Object that offers database related algorithms to
-                            execute operations like insert, update, delete or retrive from a database
-                            or any other data-source
-
-            Repository      is a enhanced DAO. that has features like caching and ORM ...etc.,
-
-
-            Database    <----->     APP     <------>    EndUsers
-
-            Database    <----->[ DAO --(model)--- Service --(model)---- UI ]]<------>    EndUsers
-
     Funtional Interfaces and Lambda Expressions and Method Referencing and Streams API
     ----------------------------------------------------------------------------------------
 
@@ -534,4 +499,144 @@ Collections
                 flatMap(mapper)         this accepts a clustured or nested stream and is going to flatten it into a plain stream
 
                     List list = listOfLists.stream().flatMap(List::stream).collect(Collectors.toList());
+
+    Mulit-Layer Arch
+    --------------------------------------------------------------------------------------
+        POJO        Plain Old Java Object, is any java class
+                    having fields , getters and setters
+
+        An application is divided into multiple layers where
+        each layer has a specific task.
+
+            Models          is any POJO that represents a domain-entity (Student, Employee, ..etc)
+                            - the model must define constructors, setters and getters
+                            - the model must override toString, equals and hashcode methods from Object class
+
+            Entities        is any model that is mapped to a database-table using ORM.
+
+            Services        is any POJO that offers bussiness-logic like computations, validations and any other
+                            domain-specific-algorithms.
+
+            Controllers     is any POJO that offers the flow-control in the app.
+
+            UI              is any POJO that offers user-interface like accepting data ro commands from a 
+                            end-user or displaying info or poutput to the end-user.
+
+            DAO             Data-Access-Object that offers database related algorithms to
+                            execute operations like insert, update, delete or retrive from a database
+                            or any other data-source
+
+            Repository      is a enhanced DAO. that has features like caching and ORM ...etc.,
+
+
+            Database    <----->     APP     <------>    EndUsers
+
+            Database    <----->[ DAO --(model)--- Service --(model)---- UI ]]<------>    EndUsers
+
+            Mulit-Layer Arch is governed by S.O.L.I.D Principles
+
+                S - Single Responsibility Principle
+                    A unit of code (class) shall have only one resposibility (type of operations)
+                    Service     handle only bussiness logic
+                    DAO/Repo    handle only Database related logic
+                    Controllers handle only flow-control related logic
+                    UI          hanle only user-Interaction logic like input and output
+
+                O - Open / Clsoed Principle
+                    A unit of code must be
+                        Open for extension and
+                        Closed for altration                                       
+
+                L - Liskov Substitution Principle
+                    An object of a super-type must be substitutable by its sub-type.
+
+                    Employee
+                        | <- Manager
+                        
+                    Employee emp = new Manager(); 
+
+                I - Interface Seggrigation Principle
+                    An interface msut not force non-implementable behaviours on its sub-types.
+
+                    interface Shape {
+                        double gertArea();
+                        double getPerimeter();
+                        double getVolume();
+                    }
+
+                    Expecting Circle,Rectangle, Cuboid, Cylinder will be the sub-types
+
+                    Circle and Rectangle has no implementation for 'volume' (not corrrect)
+                    Cuboid and Cylinder has no implementation for 'perimeter' (not corrrect)
+
+                    interface Shape {
+                        double getArea();
+                    } 
+
+                    interface Shape2D extends Shape {
+                        double getPerimeter();
+                    }
+
+                    interface Shape3D extends Shape {
+                        double getVolume();
+                    }
+
+                D - Dependency Inversion Principle
+                    A unit of code must depend on the abstraction but not concrete implmentation.
+
+                    com.cts.hrapp.dao
+                        class EmployeeDAO {
+                            //offers methods to add,delete,update and retrive employees
+                            //the implementation was made on JDBC-api
+                        }
+
+                    com.cts.hrapp.service
+                        class EmployeeService {
+                            private EmployeeDAO empDao;
+
+                            public EmployeeService(){
+                                this.empDao = new EmployeeDAO();
+                            }
+                        }
+
+                    EmployeeService is tightluy coupled with EmployeeDAO.
+                    If we have to repalce jdbc-api with jpa-hibernate.
+                    If a create a new EmployeeDAO2 that offers similar operatiosn but those operatiosn may or may not
+                    match their signatures with the earlier implementation. If EmployeeDAO has 'addEmployee' method
+                    EmployeeDAO2 may ahve 'createEmployee' method. Becasue of this
+                    the Service class must be compeltly modified.
+
+                    com.cts.hrapp.dao
+                        interface EmployeeDAO {
+                            //offers abstract methods to add,delete,update and retrive employees                            
+                        }
+
+                        class EmployeeDAOImpl implement EmployeeDAO {
+                            //offers methods to add,delete,update and retrive employees
+                            //the implementation was made on JDBC-api
+                        }
+
+                        class EmployeeDAOImpl2 implement EmployeeDAO {
+                            //offers methods to add,delete,update and retrive employees
+                            //the implementation was made on jpa and hibernate
+                        }
+
+                    com.cts.hrapp.service
+                        interface EmployeeService {{
+
+                        }
+
+                        class EmployeeServiceImpl implements EmployeeService {
+                            private EmployeeDAO empDao;
+
+                            public EmployeeService(EmployeeDAO dao){
+                                this.empDao = dao;
+                            }
+                        }
+
+                    Now if i have to create a new EmployeeDAOImpl2 with jpa-logic, as that
+                    as well implements the EmployeeDAO interface, it has to manditoryly offer
+                    m,ethods with the exact smae signature. The Service class need not bhe modfied.
+
+
 
