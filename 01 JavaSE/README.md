@@ -633,10 +633,106 @@ Collections
                                 this.empDao = dao;
                             }
                         }
-
-                    Now if i have to create a new EmployeeDAOImpl2 with jpa-logic, as that
+ 
+                    Now when we create a new EmployeeDAOImpl2 with jpa-logic, as that
                     as well implements the EmployeeDAO interface, it has to manditoryly offer
-                    m,ethods with the exact smae signature. The Service class need not bhe modfied.
+                    methods with the exact smae signature. The Service class need not be modfied.
 
+    JUnit
+    ----------------------------------------------------------------------------------
+        JUnit is a widely used testing framework that provides annotations and assertions to structure your tests.
 
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.10.1</version>
+            <scope>test</scope>
+        </dependency>
 
+        These annotations define the setup and teardown logic for tests:
+
+            @Test: Marks a method as a test case to be executed.
+
+            @BeforeEach: Runs before each test method in the class. Used for setting up common resources (e.g., creating fresh object instances).
+
+            @AfterEach: Runs after each test method. Used for cleanup.
+
+            @BeforeAll: Runs once before all test methods in the class. Must be a static method. Used for expensive setup that can be shared.
+
+            @AfterAll: Runs once after all test methods in the class. Must be a static method. Used for shared cleanup.
+
+            @DisplayName: Provides a more readable, descriptive name for a test class or method.
+
+            @Disabled: Disables a test class or method, preventing it from running.
+
+        Common Assertions
+
+            Assertions are methods used to verify the expected result of a test:
+
+            assertEquals(expected, actual): Checks if two values are equal.
+
+            assertTrue(condition): Checks if a condition is true.
+
+            assertFalse(condition): Checks if a condition is false.
+
+            assertThrows(Exception.class, executable): Checks that the specified exception is thrown when the executable is run.
+
+            assertNull(object) / assertNotNull(object): Checks if an object is null or not null.
+
+    Mockito
+    ----------------------------------------------------------------------------------
+
+        Mockito is a popular Java mocking framework used to create mock objects for dependencies.
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.8.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.8.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        Key Annotations
+            @Mock: Creates a mock instance of a class or interface. This object is a simulated dependency whose behavior you control.
+
+            @Spy: Creates a partial mock or spy of a real object. 
+                    Real methods are called by default, but you can choose to stub specific methods.
+
+            @InjectMocks: 
+                Creates an instance of the class under test and automatically injects the fields annotated with @Mock or @Spy into it.
+
+            @Captor: 
+                Used to create an ArgumentCaptor instance, which captures arguments passed to a mocked method for later assertion.
+
+            @ExtendWith(MockitoExtension.class): 
+                The JUnit 5 annotation required to enable Mockito annotations (like @Mock and @InjectMocks) within the test class.
+
+        Core Operations
+            1. Stubbing (Defining Behavior)
+                We tell the mock object how to behave when a specific method is called.
+
+                    // Define what the mock will return when a method is called
+                    when(mockDependency.someMethod()).thenReturn(expectedValue);
+
+                    // Stubbing a method that returns void to throw an exception
+                    doThrow(new IllegalStateException()).when(mockDependency).voidMethod();
+
+            2. Verification (Checking Interaction)
+                We verify that the class under test interacted with the mock dependency in the expected way.
+
+                // Verify that 'someMethod()' was called exactly once
+                verify(mockDependency).someMethod();
+
+                // Verify that 'anotherMethod()' was called twice
+                verify(mockDependency, times(2)).anotherMethod();
+
+                // Verify that 'someMethod()' was never called
+                verify(mockDependency, never()).someMethod();
+            
+        
