@@ -41,7 +41,7 @@ IoC in Spring
             Container   is that one who creates, manages and supplies object of other components in an 
                         application.
 
-            Component   is any class that offers a functionality of the application adn whoes objects
+            Component   is any class that offers a functionality of the application and whoes objects
                         are being managed by the container.
 
                         A Service, or a DAO, or A Utility ..et.,
@@ -161,8 +161,8 @@ IoC in Spring
                 |<- @Controller
                 |<- @RestController
                 |<- @Advice
-                |<- ControllerAdvice
-                |<- RestControllerAdvice
+                |<- @ControllerAdvice
+                |<- @RestControllerAdvice
                 ...etc.,
 
             @Scope("")               can be set to
@@ -192,6 +192,9 @@ IoC in Spring
 
             @Value              is used to inject values from '.properties / .yaml' files into
                                 primitive fields and string fields.
+
+            @PropertySource     used along with @Configuration , and supplies the name of the '.properties' file.
+                                where the .properties file has key-value pair of externalized values.
                                 
             @Autowired          is used to inject references of other beans into fields .
 
@@ -205,10 +208,7 @@ IoC in Spring
                                 Setter Injection            @Autowired is applied on a setter
                                 Method Injection            @Autowired is applied on a method / method argument
 
-
-            @PropertySource     used along with @Configuration , and supplies the name of the '.properties' file.
-                                where the .properties file has key-value pair of externalized values.
-
+            
         Java Based Config
 
             is sued to create beans using java methods. This is used for creating benas to classes
