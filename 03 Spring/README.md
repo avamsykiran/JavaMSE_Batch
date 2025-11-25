@@ -273,8 +273,238 @@ Spring Boot 3.x
     spring boot application. Any task that needs to ebe executed at the start up time of the app
     can be programed in these CommndLineRunner implementation classes.
 
-Spring Rest-api
+Spring YAML Configuration
+------------------------------------------------------------------------
 
+        YAML is a alternate format for .proeprties file
+
+        application.properties
+
+            spring.application.name=App Name
+            spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+            spring.datasource.url=jdbc:mysql://localhost:3306/db
+            spring.datasource.username=root
+            spring.datasource.password=root
+
+        application.yml
+
+            spring:
+                application:
+                    name: App Name
+                datasource:
+                    driver-class-name: com.mysql.cj.jdbc.Driver
+                    url: jdbc:mysql://localhost:3306/db
+                    username: root
+                    password: root
+ Spring Profiles
+------------------------------------------------------------------------
+    A profile indicates a set of beans or properties to be activated only for
+    a particular phase of the project (staging / dev/ prod ...etc)
+
+    To activate a profile
+        
+        (a) while executing a spring boot app jar file
+            java -jar my-app.jar -Dspring.profiles.active=dev
+
+        (b) in application.properties
+                spring.profiles.active=dev
+
+    Profile specific properties files
+
+        application.properties          is used irrespective of a profile (default props file)
+        application-prod.properties     is used when spring.profiles.active=prod
+        application-dev.properties     is used when spring.profiles.active=dev
+
+        if a property appeares both in default properties file and profile-specfic properties file,
+        the profile specfic properties file will have the priority.
+
+    Multiple Profile in the same application.proeprties file
+
+        spring.application.name=App Name
+        spring.profiles.active=dev
+        #---
+        spring.config.activate.on-profile=dev
+        spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+        spring.datasource.url=jdbc:mysql://localhost:3306/db
+        spring.datasource.username=root
+        spring.datasource.password=root
+        #---
+        spring.config.activate.on-profile=prod
+        spring.datasource.driver-class-name=org.h2.Driver
+        spring.datasource.url=jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+        spring.datasource.username=sa
+        spring.datasource.password=sa
+
+    @Profile annotation
+
+        this is applied along with @Component or @Bean annotations
+
+        @Service
+        @Profile("dev")
+        public class PincodeSearchServiceFileBasedImpl implements PincodeSearchService {
+
+            public Location getLocationOf(String pincode){
+                //write logic to read from a hypothical file of pincodes
+                //and return the location
+            }
+        }
+
+        @Service
+        @Profile("prod")
+        public class PincodeSearchServiceApiBasedImpl implements PincodeSearchService {
+
+            public Location getLocationOf(String pincode){
+                //write logic to call a govt postal api
+                //and return the location
+            }
+        }
+
+Spring Data
+------------------------------------------------------------------------
+    is a spring module that generates a dynamic repository implementation.
+    
+    Spring Data API is an umbrella project that simplifies data access across various persistence technologies, including JPA (SQL) and NoSQL databases.
+
+    Spring Data API revolves around the `Repository` interface and its sub-interfaces.
+
+        Repository                  Base marker interface for all repositories and provides no methods 
+            |
+            |<- CrudRepository      Provides basic CRUD operations. 
+            |       |                `save()`, `findById()`, `findAll()`, `delete()`, `count()` 
+            |       |
+            |       | <- PagingAndSortingRepository
+            |       |       |       `findAll(Sort sort)`, `findAll(Pageable pageable)` 
+            |       |       |
+            |       |       |<- JpaRepository   From Spring Data JPA 
+            |       |       |                   `flush()`, `saveAllAndFlush()`
+            |       |       |
+            |       |       |<- MongoRepository From Spring Data MongoDb (NoSQL)
+            |       |
+            |       |<- ReactiveCrudRepository
+            |       |       |
+            |       |       |<- ReactiveMongoRepository
+            |       |       
+            |       | <- KeyValueRepository
+            |       |       |
+            |       |       |<- RedisRepository From Spring Data Redis (NoSQL)
+
+        @Entity
+        @Table("emps")
+        public class Employee {
+            @Id
+            private Long empId;
+            private String fullName;
+            private LocalDate hireDate;
+            private Double salary;
+            private String mailId;
+
+            //consturcotrs and getters and setters ..etc.,
+        }
+
+        public interface EmployeeRepo extends JpaRepository<Employee,Long> {
+            List<Employee> findAllByFullName(String fullName);
+            boolean existsByMailId(String mailId);
+            Optional<Employee> findByMailId(String mailId);
+        }       
+
+    Core Method Name Notations
+
+        Spring Data uses a Domain Specific Language (DSL) in the method name to construct queries. 
+        A typical method signature follows the pattern:
+
+            [Keyword \ Prefix] [Property \ Name] [Query \ Keyword] [Property \ Name] ...
+
+        Method Name Keywords and
+    
+            `find`      Starts a query method (most common) 
+                        `findByLastName(String lastName)` 
+                        `findAllByLastName(String lastName)` 
+
+            `count`     Returns the number of entities matching the query 
+                        `countByActive(boolean active)` 
+
+            `delete`    Deletes the entities matching the query 
+                        `deleteByStatus(Status status)` 
+
+            `exists`    Checks if at least one entity matches the query 
+                        `existsByEmail(String email)` 
+
+        Quering Keywords and Patterns
+
+            Simple      Match exact value 
+                        `findByEmail(String email)` is similar to  `where email = ?` 
+
+            `And`       Combine conditions with logical AND 
+                        `findByFirstNameAndLastName(...)` is similar to `where fn = ? and ln = ?` 
+
+            `Or`        Combine conditions with logical OR 
+                        `findByAgeOrStatus(...)` is similar to `where age = ? or status = ?` 
+
+            `Not`       Negate the condition 
+                        `findByAgeNot(int age)` is similar to `where age != ?` 
+
+            `Between`   Match values between two boundaries 
+                        `findByBirthDateBetween(...)` is similar to `where date between ? and ?` 
+
+            `LessThan` / `GreaterThan` 
+                        Comparison operators 
+                        `findByHeightLessThan(...)` is similar to `where height < ?` 
+
+            `StartingWith` / `EndingWith` / `Containing` 
+                        String matching (often translated to `LIKE`) 
+                        `findByAddressContaining(...)` is similar to `where address LIKE '%?%'` 
+
+            `Like` / `NotLike` 
+                        String matching (requires you to pass the wildcard `%` in the parameter) 
+                        `findByZipCodeLike(String zipCode)` is similar to `where zipCode LIKE ?` 
+
+            `IsNull` / `IsNotNull` 
+                        Check for null values 
+                        `findByDescriptionIsNull()` is similar to `where description is null` 
+
+            `In` / `NotIn` 
+                        Match against a collection of values 
+                        `findByRoleIn(Collection<Role> roles)` is similar to `where role in (?)` 
+
+            `True` / `False` 
+                        For boolean properties 
+                        `findByActiveTrue()` is similar to `where active = true` 
+
+            `IgnoreCase`    
+                        Ignore casing for String matching (appended to the property) 
+                        `findByCityIgnoreCase(String city)` is similar to `where LOWER(city) = LOWER(?)` 
+
+        Ordering and Limiting Results
+        
+            `OrderBy`   Sort results by a property 
+                        `findByStatusOrderByDateDesc(...)` 
+
+            `Desc` / `Asc`
+                        Sort direction 
+                        `findByStatusOrderByNameAsc(...)` 
+
+            `First` / `Top`
+                        Limit the number of results returned 
+                        `findTop10ByAge(int age)` 
+        
+        When to Use `@Query` (The Escape Hatch)
+
+            When the method name DSL becomes too cumbersome, unreadable, or you need to use database-specific features (e.g., joins, complex aggregations), use the `@Query` annotation. 
+
+            public interface UserRepository extends JpaRepository<User, Long> {
+                // JPQL query
+                @Query("SELECT u FROM User u WHERE u.age > :minAge AND u.status = :status")
+                List<User> findOldActiveUsers(@Param("minAge") int minAge, @Param("status") Status status);
+            }
+            
+            public interface ProductRepository extends MongoRepository<Product, String> {
+                // MongoDB Query Language (JSON format)
+                @Query("{ 'tags' : { $in : [?0] }, 'price' : { $lt : ?1 } }")
+                List<Product> findProductsByTagAndMaxPrice(String tag, double maxPrice);
+            }
+
+Spring Rest-api
+------------------------------------------------------------------------
     @RestController
     @RestControllerAdvice
     
@@ -331,68 +561,7 @@ Spring Rest-api
                 */
             }
 
-    Spring Profiles
-
-        A profile indicates a set of beans or properties to be activated only for
-        a particular phase of the project (staging / dev/ prod ...etc)
-
-        To activate a profile
-            
-            (a) while executing a spring boot app jar file
-                java -jar my-app.jar -Dspring.profiles.active=dev
-
-            (b) in application.properties
-                    spring.profiles.active=dev
-
-        Profile specific properties files
-
-            application.properties          is used irrespective of a profile (default props file)
-            application-prod.properties     is used when spring.profiles.active=prod
-            application-dev.properties     is used when spring.profiles.active=dev
-
-            if a property appeares both in default properties file and profile-specfic properties file,
-            the profile specfic properties file will have the priority.
-
-        Multiple Profile in the same application.proeprties file
-
-            spring.application.name=App Name
-            spring.profiles.active=dev
-            #---
-            spring.config.activate.on-profile=dev
-            spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-            spring.datasource.url=jdbc:mysql://localhost:3306/db
-            spring.datasource.username=root
-            spring.datasource.password=root
-            #---
-            spring.config.activate.on-profile=prod
-            spring.datasource.driver-class-name=org.h2.Driver
-            spring.datasource.url=jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
-            spring.datasource.username=sa
-            spring.datasource.password=sa
-
-        @Profile annotation
-
-            this is applied along with @Component or @Bean annotations
-
-            @Service
-            @Profile("dev")
-            public class PincodeSearchServiceFileBasedImpl implements PincodeSearchService {
-
-                public Location getLocationOf(String pincode){
-                    //write logic to read from a hypothical file of pincodes
-                    //and return the location
-                }
-            }
-
-            @Service
-            @Profile("prod")
-            public class PincodeSearchServiceApiBasedImpl implements PincodeSearchService {
-
-                public Location getLocationOf(String pincode){
-                    //write logic to call a govt postal api
-                    //and return the location
-                }
-            }
+   
 
     Spring Actuator
 
@@ -407,106 +576,6 @@ Spring Rest-api
         /actuator/health
         /actuator/health/indicator
 
-    Spring Batch
-
-        Is a spring module to execute batch operations.
-        A batch operation refers to a any time-consuming operation that is scheduled to execute.
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-batch</artifactId>
-            <version>6.2.0</version>
-        </dependency>
-
-
-        (or)
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-batch</artifactId>            
-        </dependency>
-
-
-        Spring Batch look at each job as a group of steps in sequence. 
-        Spring Batch uses a sql-database as job-repository.
-        Spring Boot auto-config's h2db as a job-repo.
-        Each Step will have three parts (ItemReader, ItemWriter and ItemProcess) where an item indicates
-        one record (record can be a string or anative valeu or a complex object).
-
-        JOB
-            Step1
-            Step2
-            Step3
-            ...etc.,
-
-        Step
-            ItemReader      is responsible to receive data
-            ItemProcess     is responsible to process data
-            ItemWriter      is reponsible to dispatch data
-
-
-    Spring JMS
-
-        Spring JMS is a messageing service module from Spring Framework
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jms</artifactId>
-            <version>4.3.3.RELEASE</version>
-        </dependency>
-
-        (or)
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-boot-starter-jms</artifactId>            
-        </dependency>
-
-        JMSTemplate
-
-            is a bean provided by Spring JMS to send a message over
-            a messaging server.
-
-            jmsTemplate.convertAndSend(msgObj);
-
-        JMS Listener
-
-            To create a listener without annotation
-
-            public class MyAppMsgListener implements MessaginListener {
-                public void onMessage(Message msg){
-                    //we will write code that has to be invoekd
-                    //on receiving a message
-                }
-            }
-
-            To create a listener with annotaiont
-
-                @JmsListener(destination = "myDestination")
-
-                on any method that does something on receiving a msg.
-
-    Spring YAML Configuration
-
-        YAML is a alternate format for .proeprties file
-
-        application.properties
-
-            spring.application.name=App Name
-            spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-            spring.datasource.url=jdbc:mysql://localhost:3306/db
-            spring.datasource.username=root
-            spring.datasource.password=root
-
-        application.yml
-
-            spring:
-                application:
-                    name: App Name
-                datasource:
-                    driver-class-name: com.mysql.cj.jdbc.Driver
-                    url: jdbc:mysql://localhost:3306/db
-                    username: root
-                    password: root
 
     Case Study
     -----------------------------------------------------------------
