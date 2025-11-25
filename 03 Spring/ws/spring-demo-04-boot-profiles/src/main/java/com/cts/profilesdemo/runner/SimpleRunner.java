@@ -14,6 +14,5 @@ public class SimpleRunner implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		System.out.println(appName);
 	}
-	
-	
+		
 }

@@ -276,26 +276,27 @@ Spring Boot 3.x
 Spring YAML Configuration
 ------------------------------------------------------------------------
 
-        YAML is a alternate format for .proeprties file
+    YAML is a alternate format for .proeprties file
 
-        application.properties
+    application.properties
 
-            spring.application.name=App Name
-            spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-            spring.datasource.url=jdbc:mysql://localhost:3306/db
-            spring.datasource.username=root
-            spring.datasource.password=root
+        spring.application.name=App Name
+        spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+        spring.datasource.url=jdbc:mysql://localhost:3306/db
+        spring.datasource.username=root
+        spring.datasource.password=root
 
-        application.yml
+    application.yml
 
-            spring:
-                application:
-                    name: App Name
-                datasource:
-                    driver-class-name: com.mysql.cj.jdbc.Driver
-                    url: jdbc:mysql://localhost:3306/db
-                    username: root
-                    password: root
+        spring:
+            application:
+                name: App Name
+            datasource:
+                driver-class-name: com.mysql.cj.jdbc.Driver
+                url: jdbc:mysql://localhost:3306/db
+                username: root
+                password: root
+                
  Spring Profiles
 ------------------------------------------------------------------------
     A profile indicates a set of beans or properties to be activated only for
