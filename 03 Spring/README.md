@@ -506,6 +506,41 @@ Spring Data
 
 Spring Rest-api
 ------------------------------------------------------------------------
+
+    MVC - Model-View-Controller Arch., (J2EE spec)
+
+        repos <---models--> services <--models--> controllers <----REQ---- CLIENT
+                                                        |                      ↑ 
+                                                        |model                 | 
+                                                        ↓                      | 
+                                                        VIEW(s) -----RESP----->|
+
+        Controller are implemented via servlets
+
+        Views       can JSP / JSF ...etc.,
+
+    Single FronController MVC Arch., (Spring Framework)
+
+        repos <---models--> services <--models--> controllers <--model--> FrontController <----REQ---- CLIENT
+                                                                                |                      ↑ 
+                                                                                |model                 | 
+                                                                                ↓                      | 
+                                                                                VIEW(s) -----RESP----->|
+        FrontController is offered by Spring Framework (DispatcherServlet)
+
+        Controllers are POJO marked as '@Controller' that shall offer action-methods 
+                        to receive the data from FrontController and return a vewi-name and model
+
+        views       can JSP / JSF / Thymeleaf ...etc.,
+
+
+    Single FronController REST Arch., (Spring Framework)
+
+        repos <---models--> services <--models--> rest-controllers <--model--> FrontController <--REQ-- CLIENT
+                                                                                    |                       ↑ 
+                                                                                    model--RESP(json/xml)-->|
+
+
     @RestController
     @RestControllerAdvice
     
@@ -534,6 +569,13 @@ Spring Rest-api
             Consumer        /consumers
             Article         /articles
             ...etc
+                                                    HttpStatus On   HttpStatus On       HttpStatus On
+            HttpMethod      CRUD-Operation          Success         Failure (Client)    Failure (Server)
+            --------------------------------------------------------------------------------------------     
+                GET         Retriving Records       200-OK          404-NOT_FOUND       500-Internal_Server_Err
+                POST        Creating Record         201-CREATED     400-BAD_REQUEST     500-Internal_Server_Err
+                PUT         Updating Record         202-ACCEPTED    400-BAD_REQUEST     500-Internal_Server_Err
+                DELETE      Deleting Record         204-NO_CONTENT  404-NOT_FOUND       500-Internal_Server_Err
 
             @RestController
             @ReqeustMapping("/emps")
@@ -560,451 +602,38 @@ Spring Rest-api
                 ...@PutMapping for update
                 ...@DeleteMapping for delete
                 */
-            }
-
-   
-
-    Spring Actuator
-
-        actuator is a health and metrics monitoring tool.
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>  
-
-        /actuator                       this gives compelte analysis and lsit of indicators
-        /actuator/health
-        /actuator/health/indicator
-
-
-    Case Study
-    -----------------------------------------------------------------
-
-        Rest-API for a BudgetPlanning application
-
-            The Budget planning application will be used to plan the incoming and expenditure
-            for a variety of projects. The rest-api is expected to provide end-points to 
-                
-                Retrive /Add/ Modify/ Remove a project record
-                Retrive /Add/ Modify/ Remove a Transaction of a project record
-
-                Project
-                    projectId           : Long
-                    title               : String
-                    projectManager      : String
-                    plannedStartDate    : LocalDate
-                    plannedEndDate      : LocalDate
-                    budget              : List<Txn>
-
-                Txn
-                    txnId               : Long
-                    header              : String
-                    amount              : Double
-                    type                : TxnType   (enum of CREDIT/ DEBIT)
-                    project             : Project
-
-                Resource        Table           endpoint
-                -------------------------------------------------------------------------------------------------           
-                Project         projects        /projects
-
-                Transaction     transactions    /projects/{projectId}/transactions
-                                                GET
-                                                POST
-
-                                                /tranbsactions/{txnId}
-                                                GET
-                                                PUT
-                                                DELETE
-
-    Spring Web MVC
-
-        Evolution of Web
-            WebSite (static)                -       html content is pre-written and cannot be changed from user to user
-            WebApplication (dynamic)        
-                DynamicWebApplication       -       html contnet is generated as the user input dynamically on the server
-                SPA - Single Page Applications -    html contnet is generated as the user input dynamically on the client
-
-        DynamicWebApplication
-
-            is an application where an html content is generated on the go (dynamically)
-            when a request is received by a server-side executable program and the
-            generated content is send as a response.
-
-            Means
-                (1) we will have a program that is capable of execution on a server
-                (2) this program is executed when a request is received
-                (3) the program execution results in dynamically generated html content
-                (4) that generated html content is sent as a response
-
-            Server-Side Executable Programs
-                Java        Servlets
-                .Net        ASP.Net WebForms
-                PHP
-                ....etc.,
-
-        MVC - Archetecture
-
-            Controller      is a server-side program that is capable of
-                            receiving a request
-
-            View            is a html-generating tool
-
-            Model           is any object that carries data from controller to the view.
-
-        OnJava  MVC Archetecture
-
-            DAOs/Repos  <--Entities--> Services <---Model---> Controllers    <----REQ---- Client
-                                                                    |                         ↑  
-                                                                    | model                   |
-                                                                    ↓                         |
-                                                                    Views   ---RESP (html)--->|
-
-            DAO/Repos       are POJOs that execute data base related operations
-
-            Entities        are POJOs that are mapped to a database
-
-            Services        are POJOs that execute bussiness pogic
-
-            Model           are POJOs that carry data in the applciation
-
-            Controllers     are Servlets
-
-            Views           are JSP / JSF / Thymeleaf ...etc.,
-
-        OnJava Spring - SingleFrontController MVC Archetecture
-            
-            DAOs/Repos  <-Entities-> Services <--Model--> Controllers <---model&view--> FrontController <----REQ---- Client
-                                                                                            |                         ↑  
-                                                                                            | model                   |
-                                                                                            ↓                         |
-                                                                                            Views   ---RESP (html)--->|
-
-            DAO/Repos       are POJOs that execute data base related operations
-
-            Entities        are POJOs that are mapped to a database
-
-            Services        are POJOs that execute bussiness logic
-
-            Model           are POJOs that carry data in the applciation
-
-            Controllers     are POJOs that manage the flow of control 
-                            through the underlying services
-
-            FrontController DispatcherServlet from Spring
-                                (1) receive the req
-                                (2) extract data from the req like req parameters/cookies/request body
-                                (3) invoke the mapped action method from a controller and passes
-                                        the extracted data to that action method
-                                (4) the model and view is received from the invoekd action method
-                                (5) the model is passed to the designated view
-
-            Views           are JSP / JSF / Thymeleaf ...etc.,
-
-            interface HandlerMapping  
-                        |
-                        |<- BeanNameRequestHandlerMApping
-                        |<- ControllerNameRequestHandlerMappin
-                        |<- SimpleUrlHandlerMApping
-
-                        SimpleUrlHandlerMApping
-
-                            @ReqeustMapping(value=url,method=RequestMEthod.GET/POST)
-                                |
-                                |<-@GetMapping
-                                |<-@PostMapping
-
-                        is configured by Spring Boot by default, and thsi helps FrontController (DispatcherServlet)
-                        to find out the mapped action method from controller for a incoming req.
-
-            interface ViewResolver
-                        |
-                        |<- MessageBundleResourceViewResolver           
-                        |<- XmlResourceViewResolver
-                        |<- InternalResourceViewResolver
-
-                    MessageBundleResourceViewResolver
-                        uses a .proeprties file containing viewName=viewPath
-
-                    XmlResourceViewResolver
-                        uses a .xml file containing viewNaems and viewPAth
-
-                    InternalResourceViewResolver
-                        uses a formula to map a viewName to a viewPath    
-
-                        viewPath = prefix + viewName + suffix
-
-                        where prefix and suffix are configurable proeprties of InternalResourceViewResolver.
-
-                    Spring Boot by default creates a bean of InternalResourceViewResolver
-                    whose prefix is mapped to templates folder
-                    and suffix is mapped to '.html'
-
-                    By default the view engine supported by Spring Boot is Thymeleaf.
-
-                    We can create any number of ViewResolvers of any type.
-                    But 'order' proeprty mus tbe set for each viewResolver mandatly.
-
-            class ModelAndView
-
-                is the expected return type of all action methods in a controller.
-
-                as the name suggest it is an encapsulation of models and viewName.
-
-                ModelAndView(String viewName)
-                ModelAndView(String viewName,String modelAttributeName,Object modelAttribute)
-
-                mv.setViewName("");
-                mv.addObject(attributeName,attribute);
-
-            @ReqeustParam
-
-                is used to map a request query paramater to an arg of an action method
-
-            @PathVariable
-
-                is used to map a request path paramater to an arg of an action method
-
-            @ModelAttribute
-
-                (1) can be used to return an object as a model to every incoming request
-                    in that case this attribute is applied on a method that returns the modle object
-
-                (2) can be used to map the request form body to a arg in action metnod
-                    in that case this attribute is applied on the arg of the action method
-     
-     Thymeleaf
-        
-        The Thymeleaf is an open-source Java library that is licensed under the Apache License 2.0. It is a HTML5/XHTML/XML template engine. It provides full integration with Spring Framework.
-
-        Thymeleaf supports 
-            variable expressions (${...}) like Spring EL and executes on model attributes
-            asterisk expressions (*{...}) execute on the form backing bean (modelAttributes)
-            hash expressions (#{...}) are for internationalization
-            link expressions (@{...}) rewrite URLs.
-
-        <dependency>  
-            <groupId>org.springframework.boot</groupId>  
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>  
-        </dependency>  
-
-        To activate thymeleaf on .html
-            
-            <html lang="en" xmlns:th="http://www.thymeleaf.org">  
-        
-        application.properties
-
-            spring.thymeleaf.cache=false  
-            spring.thymeleaf.suffix=.html  
-        
-        Thymeleaf HTML attributes
-
-            th:text
-            th:value
-            th:field
-            th:object
-            th:href
-            th:if
-            th:class
-            th:each="loopingVariable : ${arrayOrListOrSet}"
-            th:insert
-            th:replace
-        
-            data-th-text
-            data-th-field
-            data-th-value
-                    ...etc., for html 5
-
-        For a deep reading:
-            https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html
-
-    Spring Reactive MongoDB
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        Config:
-
-            @Configuration
-            @EnableReactiveMongoRepositories
-            public class MongoReactiveApplication extends AbstractReactiveMongoConfiguration {
-                @Bean
-                public MongoClient mongoClient() {
-                    return MongoClients.create();
-                }
-
-                @Override
-                protected String getDatabaseName() {
-                    return "someDatabaseName";
-                }
-            }
-
-        Mongo Document and Repo
-            @Document
-            public class Account {
-            
-                @Id
-                private String id;
-                private String owner;
-                private Double value;
-            
-                // getters and setters
-            }
-
-            @Repository
-            public interface AccountCrudRepository extends ReactiveCrudRepository<Account, String> {
-                Flux<Account> findAllByValue(String value);
-                Mono<Account> findFirstByOwner(Mono<String> owner);
-            }
-
-            (or)
-            @Repository
-            public interface AccountReactiveRepository extends ReactiveMongoRepository<Account, String> { 
-
-            }
-
-    Spring Web Flux for Reactive Programming
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>            
-        </dependency>
-
-        @RestController
-        @RequestMapping("/accounts")
-        public class AccountController {
-
-            private AccountRepository accountRepository;
-
-            @GetMapping
-            public Flux<Account> getAll() {
-                return accountRepository.findAll();
-            }
-
-            @GetMapping("/{id}")
-            public Mono<Account> getById(@PathVariable String id) {
-                return accountRepository.findById(id);
-            }
-        }
-
-        Reactive Web Client
-
-        public class EmployeeWebClient {
-
-            WebClient client = WebClient.create("http://localhost:8080");
-
-            Mono<Account> accMono = client.get()
-                .uri("/accounts/{id}", "1")
-                .retrieve()
-                .bodyToMono(Account.class);
-
-            accMono.subscribe(System.out::println); 
-            
-            Flux<Account> accFlux = client.get()
-                .uri("/accounts")
-                .retrieve()
-                .bodyToFlux(Account.class);
-
-            accFlux.subscribe(System.out::println);
-
-        }
-
-RestTemplate
----------------------------------------------------------------
-
-    RestTemplate is a rest-client
-
-    RestTemplate restClient = new RestTemplate();
-
-    ResponseEntity<Type> resp = restClient.getForObject(url,Type.class)
-    ResponseEntity<Type> resp = restClient.postForObject(url,reqBody)
-    ResponseEntity<Type> resp = restClient.putForObject(url,reqBody)
-    ResponseEntity<Void> resp = restClient.deleteForObject(url)
-
-RestTemplate vs WebClient
---------------------------------------------
-
-    RestTemplate is blocking in nature or it is synchronized.
-
-        RestTemplate is employed to consume rest-api
-        RestTemplate brings ResponseiveEntity
-
-    WebClient is non-blocking in nature or it is asyunchronized or reactive.
-
-        WebClient is employed to consume Reactive (webFlux) rest-api
-        WebClient brings Mono / Flux
-
-Open Feign
---------------------------------------------------
-
-    is a dynamically auto-implemented rest client.
-    comes as a part (sub-module) of spring-cloud modules.
-
-    this eliminates the usage of rest-template.
-
-    this module autoamtes rest-api calls.
-
-    @FeignClient(name="empClient",url="http://localhost:9999/emps")
-    public interface EmployeeService {
-        @GetMapping
-        List<Employee> getAll();
-    }
-
-    @EnableFeignClient
-        on the congfiuration class
-
-Internationalization
-------------------------------------------------------
-
-    No extra dependencies needed.
-
-    Spring Web MVC iuses 'LocaleResolver' to find out what loacles to be loaded.
-
-    @Bean
-    public LocaleResolver localeResolver() {
-        SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(Locale.US);
-        return slr;
-    }
-
-    Default Locale is different from no locale found.
-
-    Spring Web MVC uses 'LocaleChangeInterceptor' to change the locale of a application
-    programatically or dynamically from the user.    
-
-    @Configuration
-    public class MyWebConfigs implements WebMvcConfigurer {
-
-        @Bean
-        public LocaleChangeInterceptor localeChangeInterceptor() {
-            LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-            lci.setParamName("lang");
-            return lci;
-        }
-
-        @Override
-        public void addInterceptors(InterceptorRegistry registry) {
-            registry.addInterceptor(localeChangeInterceptor());
-        }
-    }
-
-    Spring Boot Message Bundles
-
-        resource/
-            |-messages.properties           //is our fallback message bundle
-            |-messages_us.proeprties        //is our default message bundle as per the config
-            |-messages_fr.proeprties
-            |-messages_in.proeprties
-        ...etc.,
-
-    <h1 data-th-text="#{greeting}"></h1>
+            }  
+
+Swagger UI
+----------------------------------------------------------------------
+    Swagger UI is a powerful tool for visualizing and interacting with your Spring Boot REST API's documentation. The modern and recommended way to integrate this is by using the springdoc-openapi library.
+
+    <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        <version>2.7.0</version>
+    </dependency>
+
+    We can typically access it at:
+        http://localhost:PORT/swagger-ui.html  (or)
+        http://localhost:PORT/swagger-ui/index.html 
+    
+    The underlying OpenAPI JSON documentation is usually available at:
+        http://localhost:PORT/v3/api-docs
+
+Spring Actuator
+----------------------------------------------------------------------
+
+    actuator is a health and metrics monitoring tool.
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>  
+
+    /actuator                       this gives compelte analysis and lsit of indicators
+    /actuator/health
+    /actuator/health/indicator
 
 Spring Boot Testing
 ----------------------------------------------------------------------
