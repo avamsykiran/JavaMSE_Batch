@@ -10771,3 +10771,9 @@ Contains: Missing org.webjars:swagger-ui:jar:javadoc:5.18.2
 
 !ENTRY org.eclipse.lsp4e 1 0 2025-11-26 09:24:54.013
 !MESSAGE [Info]	No ES Libary found for file: file:///E:/ongoing/JavaFSE/03%20Spring/ws/spring-demo-07-boot-restapi/src/main/resources/application.yml
+
+!ENTRY org.eclipse.lsp4e 1 0 2025-11-26 11:10:22.306
+!MESSAGE [Info]	ESLint server running in node v18.12.1
+
+!ENTRY org.eclipse.lsp4e 1 0 2025-11-26 11:10:22.410
+!MESSAGE [Info]	No ES Libary found for file: file:///E:/ongoing/JavaFSE/03%20Spring/ws/spring-demo-07-boot-restapi/src/main/resources/application.yml

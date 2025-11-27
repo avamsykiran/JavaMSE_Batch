@@ -25,7 +25,6 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/contacts")
-@CrossOrigin
 public class ContactsController {
 
 	@Autowired

@@ -662,6 +662,87 @@ Spring Boot Testing
 
     @WebMvcTest                     is an alternate for @AutoConfigureMockMvc in unit tests.
 
+Case Study
+-----------------------------------------------------------------
 
+    Rest-API for a BudgetPlanning application
 
+        The Budget planning application will be used to plan the incoming and expenditure
+        for a variety of projects. The rest-api is expected to provide end-points to 
+            
+            Retrive /Add/ Modify/ Remove a project record
+            Retrive /Add/ Modify/ Remove a Transaction of a project record
 
+            Project
+                projectId           : Long
+                title               : String
+                projectManager      : String
+                plannedStartDate    : LocalDate
+                plannedEndDate      : LocalDate
+                budget              : List<Txn>
+
+            Txn
+                txnId               : Long
+                header              : String
+                amount              : Double
+                type                : TxnType   (enum of CREDIT/ DEBIT)
+                project             : Project
+
+            Resource        Table           endpoint
+            -------------------------------------------------------------------------------------------------           
+            Project         projects        /projects
+
+            Transaction     transactions    /projects/{projectId}/transactions
+                                            GET
+                                            POST
+
+                                            /tranbsactions/{txnId}
+                                            GET
+                                            PUT
+                                            DELETE
+
+Spring Web Flux for Reactive Programming
+-------------------------------------------------------------------------------------------------------
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>            
+        </dependency>
+
+        @RestController
+        @RequestMapping("/accounts")
+        public class AccountController {
+
+            private AccountRepository accountRepository;
+
+            @GetMapping
+            public Flux<Account> getAll() {
+                return accountRepository.findAll();
+            }
+
+            @GetMapping("/{id}")
+            public Mono<Account> getById(@PathVariable String id) {
+                return accountRepository.findById(id);
+            }
+        }
+
+        Reactive Web Client
+
+        public class EmployeeWebClient {
+
+            WebClient client = WebClient.create("http://localhost:8080");
+
+            Mono<Account> accMono = client.get()
+                .uri("/accounts/{id}", "1")
+                .retrieve()
+                .bodyToMono(Account.class);
+
+            accMono.subscribe(System.out::println); 
+            
+            Flux<Account> accFlux = client.get()
+                .uri("/accounts")
+                .retrieve()
+                .bodyToFlux(Account.class);
+
+            accFlux.subscribe(System.out::println);
+
+        }

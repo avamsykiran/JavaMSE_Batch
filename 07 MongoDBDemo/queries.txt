@@ -1,0 +1,43 @@
+
+
+retrive  the id and title of 
+    all oils costing less than 1000
+    all beverages costing more than 100
+    all pulses costing less than 100
+    all others costing less than 200
+
+
+    db.goods.find(
+        {$or: 
+            [ 
+                {$and: [{category:"OIL"},{rate:{$lt:1000}}]},
+                {$and: [{category:"PULSES"},{rate:{$lt:100}}]}, 
+                {$and: [{category:"BEVERAGES"},{rate:{$gt:100}}]},
+                {$and: [{category:"OTHERS"},{rate:{$lt:200}}]}
+            ]
+        } , { "title":1 }
+    );
+ 
+retrive the titles and ids of the top 2 costliest beverages
+
+    db.goods.
+        find({"category":"BEVERAGES"},{"title":1,"rate":1}).
+        sort({"rate":-1}).
+        limit(2)
+
+retrive the last two cheapest goods that are measured in "1 kg Packets"
+
+    db.goods.
+        find({"unit":"1 Kg Packet"}, {"title":1, "rate":1}).
+        sort({"rate":1}).
+        limit(2)
+
+retrive , using aggregation framework, the average cost grouped by unit of each good
+    of only those goods that cost between 100 and 300 without using $and operator
+
+  db.goods.aggregate([
+                {$match:{rate:{$gte:100}}},
+                {$match:{rate:{$lte:300}}},
+                {$group:{_id:"$unit",avgRate:{$avg:"$rate"}}} 
+        ])
+
