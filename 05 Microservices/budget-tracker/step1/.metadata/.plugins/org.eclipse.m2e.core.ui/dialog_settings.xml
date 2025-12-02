@@ -25,13 +25,13 @@
 	</section>
 	<section name="Maven2ProjectWizardArchifactPage">
 		<list key="package">
-			<item value="org.bta.statement.service"/>
+			<item value="org.bta.discovery.service"/>
 		</list>
 		<list key="groupId">
 			<item value="com.bta"/>
 		</list>
 		<list key="artifactId">
-			<item value="bta-statement-service"/>
+			<item value="bta-discovery-service"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
@@ -52,8 +52,9 @@
 		<list key="name">
 		</list>
 		<list key="artifactId">
-			<item value="bta-statement-service"/>
+			<item value="bta-discovery-service"/>
 			<item value="bta-parent"/>
+			<item value="bta-statement-service"/>
 			<item value="bta-txns-service"/>
 			<item value="bta-accounts-service"/>
 		</list>
@@ -75,6 +76,7 @@
 	</section>
 	<section name="MavenModuleWizardParentPage">
 		<list key="moduleName">
+			<item value="bta-discovery-service"/>
 			<item value="bta-statement-service"/>
 			<item value="bta-txns-service"/>
 			<item value="bta-accounts-service"/>

@@ -39,9 +39,12 @@
 		<module>bta-accounts-service</module>
 		<module>bta-txns-service</module>
 		<module>bta-statement-service</module>
+		<module>bta-discovery-service</module>
 	</modules>
 		
 	<dependencies>
+		
+
 		<!-- Health and metirc monitoring -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

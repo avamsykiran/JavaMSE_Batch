@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.bta.statement.models.Txn;
 
-@FeignClient(name = "bta-txns-service")
+@FeignClient(name = "bta-txns-service", url = "http://localhost:9200")
 public interface TxnsClient {
 	@GetMapping("/{ahId}/{start}/{end}")
 	List<Txn> getTxns(@PathVariable("ahId") long ahId,
