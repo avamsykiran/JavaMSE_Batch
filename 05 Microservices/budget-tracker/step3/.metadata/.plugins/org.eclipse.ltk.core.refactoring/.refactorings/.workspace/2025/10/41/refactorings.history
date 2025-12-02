@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;bta-parent&apos;" deleteContents="true" description="Delete resource &apos;bta-parent&apos;" element1="/bta-parent" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1759905411877"/>&#x0A;<refactoring comment="Delete resource &apos;bta-txns-service&apos;" deleteContents="true" description="Delete resource &apos;bta-txns-service&apos;" element1="/bta-txns-service" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1759907815150"/>
+</session>
