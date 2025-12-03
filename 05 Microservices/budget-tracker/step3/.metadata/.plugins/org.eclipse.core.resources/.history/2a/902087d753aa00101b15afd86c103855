@@ -1,2 +1,0 @@
-spring.application.name=bta-statement-service
-server.port=9300

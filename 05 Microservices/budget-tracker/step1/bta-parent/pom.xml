@@ -38,8 +38,7 @@
 	<modules>
 		<module>bta-accounts-service</module>
 		<module>bta-txns-service</module>
-		<module>bta-statement-service</module>
-		<module>bta-discovery-service</module>
+		<module>bta-statement-service</module>		
 	</modules>
 		
 	<dependencies>
