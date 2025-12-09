@@ -172,6 +172,10 @@ Java SE
                 Employee e2 = new Manager();
                 Employee e3 = new Director();
 
+                Manager m1 = (Manager) e2;
+                Manager m2 = (Manager) e1; //ClassCastException
+
+
         Abstraction
 
             Abstraction means declaring but not implementing.
@@ -221,8 +225,12 @@ Java SE
     String Manipulation
 
         String class is immutable
+
+            String s1 = "Hello ";       
+            s1 = s1 + "World "; //s1 is reallocated as a new-string to contina "Hello World"
+
         StringBuilder
-        StringBuffer
+        StringBuffer        is thread-safe and hence a little slow in performence
 
     Exception Handling
 
