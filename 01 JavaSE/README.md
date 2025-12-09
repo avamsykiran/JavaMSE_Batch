@@ -299,6 +299,19 @@ Java SE
 
                 }
 
+Data Time API
+
+    java.time               Factiory Methods
+        LocalTime           .now(),.of(hour,min,second)
+        LocalDate           .now(),.of(year,MON,day)
+        LocalDateTime       .now(),.of(year,MON,day,hour,min,second)    
+        ZonedDateTime       .now(zoneId),.of(year,MON,day,hour,min,second,zoneId)    
+
+        Period              .between(startDate,endDate)
+        Durtion             .between(startTime,endTime)
+
+        DateTimeFormatter   .ofPattern("")
+
 Generics
 
     Generics will allow us to implement data-type independent algorithms.
@@ -353,20 +366,20 @@ Collections
             |<- Set (interface)         represents Non Linear
             |     |                     does not support duplicate elements
             |     |
-            |     | <- class HashSet            order of retrival is non-pridictable
-            |     | <- class LinkedHashSet      order of retrival is entry-order
-            |     | <- class TreeSet            order of retrival is sorted-order
+            |     | <- class HashSet            order of retrival is non-pridictable  (uses HashMap internally)
+            |     | <- class LinkedHashSet      order of retrival is entry-order (uses LinkedHashMap internally)
+            |     | <- class TreeSet            order of retrival is sorted-order (uses AVL (RedBlack) Trees internally)
 
            Map (interface)              represents a collection of key-value
             |                           put,set,get,keySet,valueSet,containsKey,containsValue,size
             |
             |<- class Hashtable         order of retrival is non-pridictable and synchronized (legecy)
             |<- class HashMap           order of retrival is non-pridictable
-            |<- class LinkedHashMap     order of retrival is entry-pridictable
-            |<- class TreeMap           order of retrival is sorted-pridictable
+            |<- class LinkedHashMap     order of retrival is entry-order
+            |<- class TreeMap           order of retrival is sorted-order
 
-        Arrays                          is a utility class offering a range of static method for array related operations
-        Collections                     is a utility class offering a range of static method to operate on lists,sets and maps
+        Arrays        is a utility class offering a range of static method for array related operations
+        Collections   is a utility class offering a range of static method to operate on lists,sets and maps
 
         java.lang.Comparable (i)
                 is the natural comparision
