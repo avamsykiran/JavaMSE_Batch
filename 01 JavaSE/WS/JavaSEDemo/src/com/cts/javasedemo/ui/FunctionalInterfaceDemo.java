@@ -1,8 +1,8 @@
 package com.cts.javasedemo.ui;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import com.cts.javasedemo.models.Employee;
 
@@ -36,7 +36,9 @@ public class FunctionalInterfaceDemo {
 			return result;
 		};
 		
-		
+		Consumer<Object> writeOnScreen = System.out::println ;
+		writeOnScreen.accept("Hello");
+				
 	}
 
 }

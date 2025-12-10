@@ -27,8 +27,7 @@ public class StreamsAPIDemo {
 		
 		System.out.println("-----------------------------------------------------------------");
 		
-		Optional<Employee> result =
-		emps.stream().reduce( (e1,e2) -> e1.getSalary()>e2.getSalary()?e1:e2 );
+		Optional<Employee> result = emps.stream().reduce( (e1,e2) -> e1.getSalary()>e2.getSalary()?e1:e2 );
 		
 		if(result.isPresent()) {
 			System.out.println(result.get());

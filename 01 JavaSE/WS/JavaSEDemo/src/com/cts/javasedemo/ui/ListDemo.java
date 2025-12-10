@@ -33,7 +33,7 @@ public class ListDemo {
 		}
 		
 		System.out.println("---------------------------------------------------------------------");
-		Collections.sort(emps, new EmployeeFullNameComparator());
+		Collections.sort( emps, new EmployeeFullNameComparator() );
 		for(Employee e : emps) {
 			System.out.println(e);
 		}

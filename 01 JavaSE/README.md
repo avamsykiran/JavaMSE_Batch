@@ -416,10 +416,85 @@ Collections
                 }
             }
 
+        Concurrent Maps
+
+            Concurrent maps solve data corruption due to Race Conditions in multi-threaded environments, by internally managing synchronization, allowing threads to operate on the map safely and efficiently.
+
+            java.util.concurrent.ConcurrentHashMap offers
+                Optimistic Reads
+                'null' is not allowed neither as a key nor as a value
+                Atomic Operations through (CAS - Compare-and-Swap), the following are a few
+                    putIfAbsent(K key, V value)
+                    computeIfAbsent(K key, Function mappingFunction)
+                    replace(K key, V oldValue, V newValue)
+            
+            Alternatives to ConcurrentHashMap
+                Hashtable
+                    Single Global Lock: Every public method in Hashtable 
+                    (including get()) is synchronized with the same lock.
+
+                Collections.synchronizedMap(new HashMap())
+                    This creates a synchronized wrapper around a HashMap and uses a single mutex/lock,
+                    limiting concurrency to one thread at a time.
+
+                ConcurrentSkipListMap
+                    This is a concurrent implementation of the SortedMap and NavigableMap interfaces.
+                    Uses a Skip List data structure, which provides O(log N) performance for most 
+                    operations while supporting highly concurrent access. 
+                    Used when we want to allow concurrency and sorted order.
+
+
     Funtional Interfaces and Lambda Expressions and Method Referencing and Streams API
     ----------------------------------------------------------------------------------------
 
-        Functional interface are thos that have exactly one abstract emthod.
+        Functional programming allows to design a process as a chain of steps, where the output of
+        one step will be input for the next step. Amd this is achived through chaining function calls.
+
+        process ------> datasource.step1().step2().step3()
+
+        this needs that we may have to pass one function as a param to another function. functional interfaces allows us to achive this.
+
+        dataSourceOfEmployees
+            .step1( anOperation )
+            .step2( anotherOperation )
+
+            operations are themselves are functions.
+
+        Assuming we have a lis tof employees 'emps'. Now We need to compute the experience of each employee
+        and we have to retrive t=only those employees having minimum 10 yrs iof experience.
+
+            step1       compute experience for all employees
+            step2       filter them based on the experience
+
+            First Approach:
+
+                for each employee
+                    compute experience
+
+                create a new-list
+
+                for each employee
+                    if emp.expr >=10 then
+                        add the emp to a new list
+
+            Second Approach:
+                
+                create a new-list
+                
+                for each employee
+                    compute experience
+                    if emp.expr >=10 then
+                        add the emp to a new list
+
+            Thrid Approach - Functional Programming
+
+                emps.stream
+                        .compute        //to compute experience
+                        .filter         //to check and filter on experiecne                        
+                        .filter         //to check and filter on salary                        
+                        .collect        //to collect only the filtered records into a new list
+
+        Functional interface are those that have only one abstract emthod.
 
             @FuntionlInterface annotation is used for compiler-check.
 
@@ -431,19 +506,6 @@ Collections
                 Predicate      that the method of this functional interface returns boolean 
 
             Functional interface are introduced to promote functional programming in java.
-
-            Functional programming allows to design a process as a chain of steps, where the output of
-            one step will be input for the next step. Amd this is achived through chaining function calls.
-
-            process ------> datasource.step1().step2().step3()
-
-            this needs that we may have to pass one function as a param to another function. functional interfaces allows us to achive this.
-
-            dataSourceOfEmployees
-                .step1( anOperation )
-                .step2( anotherOperation )
-
-                operations are themselves are functions.
 
             Functional interfaces can be implemented using a inline-function-syntax called Lambda Expressions.
 

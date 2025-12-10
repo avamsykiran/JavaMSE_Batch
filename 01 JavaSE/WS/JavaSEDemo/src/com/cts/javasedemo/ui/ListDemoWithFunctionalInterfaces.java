@@ -32,7 +32,7 @@ public class ListDemoWithFunctionalInterfaces {
 		}
 		
 		System.out.println("---------------------------------------------------------------------");
-		Collections.sort(emps, (e1,e2) -> e1.getFullName().compareTo(e2.getFullName()));
+		Collections.sort(emps, (e1,e2) -> e1.getFullName().compareTo(e2.getFullName()) );
 		for(Employee e : emps) {
 			System.out.println(e);
 		}
