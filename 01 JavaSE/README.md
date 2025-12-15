@@ -682,7 +682,7 @@ Collections
                             }
                         }
 
-                    EmployeeService is tightluy coupled with EmployeeDAO.
+                    EmployeeService is tightly coupled with EmployeeDAO.
                     If we have to repalce jdbc-api with jpa-hibernate.
                     If a create a new EmployeeDAO2 that offers similar operatiosn but those operatiosn may or may not
                     match their signatures with the earlier implementation. If EmployeeDAO has 'addEmployee' method

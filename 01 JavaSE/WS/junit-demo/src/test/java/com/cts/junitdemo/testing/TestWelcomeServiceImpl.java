@@ -3,6 +3,8 @@ package com.cts.junitdemo.testing;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.InputMismatchException;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,8 +28,8 @@ public class TestWelcomeServiceImpl {
 	}
 	
 	@Test
-	@DisplayName("should return 'Hello Vamsy' when greet('vamsy') is called")
-	void testGreetWhenAValidUserNAmeIsProvided() throws InvalidUserNameException {
+	@DisplayName("should return 'Hello Vamsy' when greet(\"vamsy\") is called")
+	void testGreetWhenAValidUserNameIsProvided() throws InvalidUserNameException {
 		String testData = "Vamsy";
 		String expected = "Hello Vamsy";
 		String actual = this.welcomeServiceImpl.greet(testData);
