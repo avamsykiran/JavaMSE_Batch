@@ -118,6 +118,12 @@ IoC in Spring
         BeanFactory             from Spring Beans
         ApplicationContext      from Spring Context
 
+        BeanFactory                         ApplicationContext
+        --------------------------------------------------------------
+        LazyLoading                         EagerLoading - bean are created at the appStartUp
+        no built-in Internationalization    built-in Internationalization
+        no Event Propagation support        built-in support to publish or listen to events
+            
     Bean Configuration
 
         Bean Configuration is a machanism to inform the container
@@ -156,14 +162,24 @@ IoC in Spring
 
             @Component("id")        //this id is optional, the lowercase classNaem will be the default
                 |
-                |<- @Repository
-                |<- @Service
-                |<- @Controller
-                |<- @RestController
-                |<- @Advice
-                |<- @ControllerAdvice
-                |<- @RestControllerAdvice
+                |<- @Repository("id") 
+                |<- @Service("id") 
+                |<- @Controller("id") 
+                |<- @RestController("id") 
+                |<- @Advice("id") 
+                |<- @ControllerAdvice("id") 
+                |<- @RestControllerAdvice("id") 
                 ...etc.,
+
+            @Component("dbView")
+            class MyDashboardView {     //dbView is the bean-id
+
+            }
+
+            @Component
+            class MyInboxView {         //myInboxView is the bean-id
+
+            }
 
             @Scope("")               can be set to
                                         singleton       creates only one bean and supplies the same when needed
@@ -190,6 +206,33 @@ IoC in Spring
 
                 ApplicationContext context = new AnnotationConfigApplicationContext(BeanConfig.class);
 
+            interface EmployeeRepo {
+
+            }
+
+            @Repository
+            class EmployeeRepoImpl implements EmployeeRepo {
+
+            }
+
+            @Service
+            class EmployeeServiceImpl {
+
+                @Value("${emp.hra:0.0}")
+                private double hraPercentage;
+                
+                @Value("${emp.greet:Hello}")
+                private String greeting;
+
+                @Autowired                
+                private EmployeeRepo empRepo;
+
+            }
+
+            application.properties
+               emp.hra=0.25
+               emp.greet=Namasthey
+
             @Value              is used to inject values from '.properties / .yaml' files into
                                 primitive fields and string fields.
 
@@ -207,7 +250,6 @@ IoC in Spring
                                 Constructor Injection       @Autowired is applied on a constructor
                                 Setter Injection            @Autowired is applied on a setter
                                 Method Injection            @Autowired is applied on a method / method argument
-
             
         Java Based Config
 
@@ -219,9 +261,21 @@ IoC in Spring
             class BeanConfig {
 
                 @Bean
-                Scanner scan(){     //method naem will be the id
+                Scanner scan(){     //method name will be the id
                     return new Scanner(System.in);
                 }
+            }
+
+            @Component
+            class UserLoginView {
+                @Autowired
+                private Scanner kbin;
+            }
+
+            @Component
+            class EmployeeView {
+                @Autowired
+                private Scanner kbin;
             }
 
 Spring Boot 3.x
