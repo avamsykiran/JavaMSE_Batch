@@ -13,14 +13,17 @@ public class ContactServiceImpl implements ContactService {
 
 	@Autowired
 	private ContactRepo contactRepo;
-	
+
 	@Override
 	public Contact add(Contact contact) {
-		return contactRepo.save(contact);
+		if (contact != null) {
+			return contactRepo.save(contact);
+		}
+		return null;
 	}
 
 	@Override
-	public void deleteById(long contactId) {		
+	public void deleteById(long contactId) {
 		contactRepo.deleteById(contactId);
 	}
 
@@ -36,8 +39,10 @@ public class ContactServiceImpl implements ContactService {
 
 	@Override
 	public Contact update(Contact contact) {
-		if(contactRepo.existsById(contact.getContactId())) {
-			contact = contactRepo.save(contact);
+		if (contact != null) {
+			if (contactRepo.existsById(contact.getContactId())) {
+				contact = contactRepo.save(contact);
+			}
 		}
 		return contact;
 	}

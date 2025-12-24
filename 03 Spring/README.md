@@ -595,8 +595,8 @@ Spring Rest-api
                                                                                     model--RESP(json/xml)-->|
 
 
-    @RestController
-    @RestControllerAdvice
+    @RestController         =   @Controller + @ResponeBody
+    @RestControllerAdvice   =   @ControllerAdvice + @ResponeBody
     
     @ReqeustMapping("/hello")
     String handleHello(){
@@ -612,7 +612,10 @@ Spring Rest-api
     }
 
     @ReqeustMapping(value="/hello",method=RequestMethod.GET)  <---- @GetMapping("/hello")
-
+    @ReqeustMapping(value="/hello",method=RequestMethod.POST)  <---- @PostMapping("/hello")
+    @ReqeustMapping(value="/hello",method=RequestMethod.PUT)  <---- @PutMapping("/hello")
+    @ReqeustMapping(value="/hello",method=RequestMethod.DELETE)  <---- @DeleteMapping("/hello")
+    
     REST api standards
 
         We will have to create only one URL per resource.
@@ -623,6 +626,14 @@ Spring Rest-api
             Consumer        /consumers
             Article         /articles
             ...etc
+
+            HttpStatus
+                100 to 199      represent receved request and under processing
+                200 to 299      represent sucessful execution of the request
+                300 to 399      represent redirection of the request
+                400 to 499      represent failed to process the reqeust due to an error from client side
+                500 to 599      represent failed to process the reqeust due to an error from server side
+
                                                     HttpStatus On   HttpStatus On       HttpStatus On
             HttpMethod      CRUD-Operation          Success         Failure (Client)    Failure (Server)
             --------------------------------------------------------------------------------------------     
@@ -762,41 +773,96 @@ Spring Web Flux for Reactive Programming
             <artifactId>spring-boot-starter-webflux</artifactId>            
         </dependency>
 
-        @RestController
-        @RequestMapping("/accounts")
-        public class AccountController {
+        Flux
+            A Flux<T> is a Reactive Streams Publisher that can emit:
+                0 to N elements: It can be empty, have one item, or a thousand. (OnNext event)
+                A Completion signal: Notifies the subscriber that no more data is coming. (OnCompletion event)
+                An Error signal: Notifies the subscriber that something went wrong. (OnError event)
 
-            private AccountRepository accountRepository;
+            We can create a Flux 
+                Flux.just("A", "B")         Creating a stream from known, static values.
+                Flux.fromIterable(list)     Converting an existing List or Set to a stream.
+                Flux.interval(Duration)     Emitting a long value every x seconds.
+                Flux.range(1, 5)            Emitting a sequence of integers.
+                repository.findAll()        Reactive Spring Data repositories return a Flux of database rows.
 
-            @GetMapping
-            public Flux<Account> getAll() {
-                return accountRepository.findAll();
+            Essential Operators
+                map(), filter(), flatMap(), collectList()
+            
+            Subscription
+                fluxObj.subscribe(onNextHandler,onErrorHandler,onCompletionHandler)
+
+        Mono
+            A Mono<T> is a Reactive Streams Publisher that emits:
+                Exactly one item,
+                Followed by a completion signal.
+            
+            We can create a Mono using
+                Mono.just(value)                Eager; Wraps a value we already have.
+                Mono.fromCallable(() -> ...)    Lazy; Runs the code only when someone subscribes 
+                Mono.empty()                    Completes immediately without emitting any data.
+                Mono.error(exception)           Emits an error signal immediately.
+                Mono.defer(() -> ...)           Creates a fresh Mono for every new subscriber.
+
+        Reactive Rest Api
+            @RestController
+            @RequestMapping("/accounts")
+            public class AccountController {
+
+                private AccountRepository accountRepository;
+
+                @GetMapping
+                public Flux<Account> getAll() {
+                    return accountRepository.findAll();
+                }
+
+                @GetMapping("/{id}")
+                public Mono<Account> getById(@PathVariable String id) {
+                    return accountRepository.findById(id);
+                }
             }
-
-            @GetMapping("/{id}")
-            public Mono<Account> getById(@PathVariable String id) {
-                return accountRepository.findById(id);
-            }
-        }
 
         Reactive Web Client
 
-        public class EmployeeWebClient {
+            public class EmployeeWebClient {
 
-            WebClient client = WebClient.create("http://localhost:8080");
+                WebClient client = WebClient.create("http://localhost:8080");
 
-            Mono<Account> accMono = client.get()
-                .uri("/accounts/{id}", "1")
-                .retrieve()
-                .bodyToMono(Account.class);
+                Mono<Account> accMono = client.get()
+                    .uri("/accounts/{id}", "1")
+                    .retrieve()
+                    .bodyToMono(Account.class);
 
-            accMono.subscribe(System.out::println); 
-            
-            Flux<Account> accFlux = client.get()
-                .uri("/accounts")
-                .retrieve()
-                .bodyToFlux(Account.class);
+                accMono.subscribe(System.out::println); 
+                
+                Flux<Account> accFlux = client.get()
+                    .uri("/accounts")
+                    .retrieve()
+                    .bodyToFlux(Account.class);
 
-            accFlux.subscribe(System.out::println);
+                accFlux.subscribe(System.out::println);
 
-        }
+            }
+
+Spring Security - Token Based Authentication - Role Based Authorization
+-------------------------------------------------------------------------------------------------------
+
+    Authentication Archetecture
+
+        Client  --REQ (credentials)  --> AuthController <-authentication-> AuthenticationManager <---> UserDetailsService
+                                            |
+                                            |
+                <--RESP (JWT-token)---------|
+
+    Authorization Archetecture
+
+        Client  --REQ (with-token)  --> JwtFilter <-authentication-> AuthenticationManager <---> UserDetailsService
+                                            |
+                                            |
+                                            ↓
+                                        ConcernedController
+                                            |
+                                            |
+                <--RESP---------------------|
+
+    
