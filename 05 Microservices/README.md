@@ -166,9 +166,9 @@ MicroServices
                 gateway-service <------------(all reqs)--------------- any-client
                     |
                     | -> forward that request to the respective micro-service
-                    | <- receives the response from that micro-service
-                    |
-                    |----------------------------------(response)---------> client
+                         receives the response from that micro-service
+                                                            |
+                                                            |-----(response)----> client
 
             Circuit - Breaker Design Pattern
 

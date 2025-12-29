@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename type &apos;com.bta.txns.services.ProfilesClient&apos; to &apos;AccountsClient&apos;&#x0D;&#x0A;- Original project: &apos;bta-txns-service&apos;&#x0D;&#x0A;- Original element: &apos;com.bta.txns.services.ProfilesClient&apos;&#x0D;&#x0A;- Renamed element: &apos;com.bta.txns.services.AccountsClient&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;ProfilesClient&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.bta.txns.services{ProfilesClient.java[ProfilesClient" matchStrategy="1" name="AccountsClient" qualified="false" references="true" similarDeclarations="false" stamp="1760077040515" textual="false" version="1.0"/>
-</session>
