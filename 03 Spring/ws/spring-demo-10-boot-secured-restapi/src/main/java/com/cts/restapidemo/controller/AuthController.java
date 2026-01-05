@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cts.restapidemo.entities.UserAccount;
 import com.cts.restapidemo.exceptions.InvalidRequestBodyException;
-import com.cts.restapidemo.repos.UserRepository;
 import com.cts.restapidemo.services.JwtService;
+import com.cts.restapidemo.services.UserAccountService;
 
 import jakarta.validation.Valid;
 
@@ -23,11 +22,8 @@ import jakarta.validation.Valid;
 public class AuthController {
 
 	@Autowired
-    private UserRepository userRepository;
-	
-	@Autowired
-    private PasswordEncoder passwordEncoder;
-	
+    private UserAccountService userService;
+			
 	@Autowired
 	private JwtService jwtService; // Custom service to generate tokens
 	
@@ -41,11 +37,8 @@ public class AuthController {
     		throw new InvalidRequestBodyException(bindingResult);
     	}
     	
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if(user.getRoles()==null) {
-        	user.setRoles("ROLE_USER"); // Default role
-        }
-        userRepository.save(user);
+    	userService.createUser(user);
+       
         return "User registered successfully!";
     }
 
