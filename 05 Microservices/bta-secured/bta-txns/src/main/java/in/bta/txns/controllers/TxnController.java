@@ -10,6 +10,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import in.bta.security.JwtAuthUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,45 +36,57 @@ public class TxnController {
 	private TxnService txnService;
 
 	@GetMapping("/balances")
-	public ResponseEntity<List<AccountHolder>> getBalances() throws AccountHolderException{
+	public ResponseEntity<List<AccountHolder>> getBalances(@AuthenticationPrincipal Jwt jwt)
+			throws AccountHolderException {
+		JwtAuthUtils.requireAdmin(jwt);
 		return ResponseEntity.ok(txnService.getAllAccounts());
 	}
 	
 	@GetMapping("/{ahId}/balance")
-	public ResponseEntity<Double> getBalance(@PathVariable("ahId")Long ahId) throws AccountHolderException{
+	public ResponseEntity<Double> getBalance(@AuthenticationPrincipal Jwt jwt, @PathVariable("ahId") Long ahId)
+			throws AccountHolderException {
+		JwtAuthUtils.requireAdminOrOwn(jwt, ahId);
 		return ResponseEntity.ok(txnService.getBalance(ahId));
 	}
 	
 	@GetMapping("/{ahId}/{start}/{end}")
 	public ResponseEntity<List<Txn>> getTxns(
-			@PathVariable("ahId")Long ahId,
-			@PathVariable("start") @DateTimeFormat(iso=ISO.DATE)LocalDate start,
-			@PathVariable("end") @DateTimeFormat(iso=ISO.DATE)LocalDate end) throws AccountHolderException{
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("ahId") Long ahId,
+			@PathVariable("start") @DateTimeFormat(iso = ISO.DATE) LocalDate start,
+			@PathVariable("end") @DateTimeFormat(iso = ISO.DATE) LocalDate end)
+			throws AccountHolderException {
+		JwtAuthUtils.requireAdminOrOwn(jwt, ahId);
 		return ResponseEntity.ok(txnService.getPeriodicTxnsByAhId(ahId, start, end));
 	}
 	
 	@PostMapping
-	public ResponseEntity<Txn> addTxn(@RequestBody @Valid Txn txn,BindingResult results) throws TxnException, AccountHolderException{
-		return saveTxn(txn,results,"ADD");
+	public ResponseEntity<Txn> addTxn(@AuthenticationPrincipal Jwt jwt, @RequestBody @Valid Txn txn,
+			BindingResult results) throws TxnException, AccountHolderException {
+		JwtAuthUtils.requireAdminOrOwn(jwt, txn.getHolder().getAhId());
+		return saveTxn(txn, results, "ADD");
 	}
 	
 	@PutMapping
-	public ResponseEntity<Txn> updateTxn(@RequestBody @Valid Txn txn,BindingResult results) throws TxnException, AccountHolderException{
-		return saveTxn(txn,results,"UPDATE");
+	public ResponseEntity<Txn> updateTxn(@AuthenticationPrincipal Jwt jwt, @RequestBody @Valid Txn txn,
+			BindingResult results) throws TxnException, AccountHolderException {
+		JwtAuthUtils.requireAdminOrOwn(jwt, txn.getHolder().getAhId());
+		return saveTxn(txn, results, "UPDATE");
 	}
 
-	private ResponseEntity<Txn> saveTxn(Txn txn, BindingResult results, String operation) throws TxnException, AccountHolderException {
-		if(results.hasErrors())
+	private ResponseEntity<Txn> saveTxn(Txn txn, BindingResult results, String operation)
+			throws TxnException, AccountHolderException {
+		if (results.hasErrors())
 			throw new TxnException(results.getAllErrors().stream()
-					.map(err->err.getDefaultMessage()).reduce((m1,m2)->m1+","+m2).orElse(null));
-	
+					.map(err -> err.getDefaultMessage()).reduce((m1, m2) -> m1 + "," + m2).orElse(null));
+
 		ResponseEntity<Txn> re = null;
-		if(operation.equals("ADD"))
-			re = new ResponseEntity<Txn>(txnService.add(txn),HttpStatus.CREATED);
+		if (operation.equals("ADD"))
+			re = new ResponseEntity<Txn>(txnService.add(txn), HttpStatus.CREATED);
 		else
-			re = new ResponseEntity<Txn>(txnService.update(txn),HttpStatus.ACCEPTED);
+			re = new ResponseEntity<Txn>(txnService.update(txn), HttpStatus.ACCEPTED);
 		return re;
 	}
-	
-	
+
+	// Authorization checks delegated to shared utility
 }

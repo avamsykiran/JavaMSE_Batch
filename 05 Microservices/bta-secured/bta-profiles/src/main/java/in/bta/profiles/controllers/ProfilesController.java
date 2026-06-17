@@ -7,6 +7,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import in.bta.security.JwtAuthUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,49 +32,54 @@ public class ProfilesController {
 	private AccountHolderService ahService;
 	
 	@GetMapping
-	public ResponseEntity<List<AccountHolder>> getAll(){
+	public ResponseEntity<List<AccountHolder>> getAll(@AuthenticationPrincipal Jwt jwt) {
+		JwtAuthUtils.requireAdmin(jwt);
 		return ResponseEntity.ok(ahService.getAll());
 	}
 	
 	@GetMapping("/{ahId}")
-	public ResponseEntity<AccountHolder> getById(@PathVariable("ahId")Long ahId){
+	public ResponseEntity<AccountHolder> getById(@AuthenticationPrincipal Jwt jwt, @PathVariable("ahId") Long ahId) {
+		JwtAuthUtils.requireAdminOrOwn(jwt, ahId);
 		AccountHolder ah = ahService.getById(ahId);
-		return ah!=null?ResponseEntity.ok(ah):new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return ah != null ? ResponseEntity.ok(ah) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
 	@GetMapping("/{ahId}/exists")
-	public ResponseEntity<Boolean> existsById(@PathVariable("ahId")Long ahId){
+	public ResponseEntity<Boolean> existsById(@AuthenticationPrincipal Jwt jwt, @PathVariable("ahId") Long ahId) {
+		JwtAuthUtils.requireAdmin(jwt);
 		return ResponseEntity.ok(ahService.existsById(ahId));
 	}
 	
 	@PostMapping
-	public ResponseEntity<AccountHolder> add(
-			@RequestBody @Valid AccountHolder ah,BindingResult bindingResult) throws AccountHolderException{
-		
-		if(bindingResult.hasErrors()) {
+	public ResponseEntity<AccountHolder> add(@AuthenticationPrincipal Jwt jwt,
+			@RequestBody @Valid AccountHolder ah, BindingResult bindingResult) throws AccountHolderException {
+		JwtAuthUtils.requireAdmin(jwt);
+		if (bindingResult.hasErrors()) {
 			throw new AccountHolderException(bindingResult.getAllErrors().stream()
-					.map(err -> err.getDefaultMessage()).reduce((m1,m2)->m1+","+m2).orElse(null));
+					.map(err -> err.getDefaultMessage()).reduce((m1, m2) -> m1 + "," + m2).orElse(null));
 		}
-		
-		return new ResponseEntity<>(ahService.add(ah),HttpStatus.CREATED);
+		return new ResponseEntity<>(ahService.add(ah), HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<AccountHolder> update(
-			@RequestBody @Valid AccountHolder ah,BindingResult bindingResult) throws AccountHolderException{
-		
-		if(bindingResult.hasErrors()) {
+	public ResponseEntity<AccountHolder> update(@AuthenticationPrincipal Jwt jwt,
+			@RequestBody @Valid AccountHolder ah, BindingResult bindingResult) throws AccountHolderException {
+		JwtAuthUtils.requireAdmin(jwt);
+		if (bindingResult.hasErrors()) {
 			throw new AccountHolderException(bindingResult.getAllErrors().stream()
-					.map(err -> err.getDefaultMessage()).reduce((m1,m2)->m1+","+m2).orElse(null));
+					.map(err -> err.getDefaultMessage()).reduce((m1, m2) -> m1 + "," + m2).orElse(null));
 		}
-		
-		
-		return new ResponseEntity<>(ahService.update(ah),HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(ahService.update(ah), HttpStatus.ACCEPTED);
 	}
 	
 	@DeleteMapping("/{ahId}")
-	public ResponseEntity<Void> deleteById(@PathVariable("ahId")Long ahId) throws AccountHolderException{		
+	public ResponseEntity<Void> deleteById(@AuthenticationPrincipal Jwt jwt, @PathVariable("ahId") Long ahId)
+			throws AccountHolderException {
+		JwtAuthUtils.requireAdmin(jwt);
 		ahService.deleteById(ahId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+
+	// Authorization checks delegated to shared utility
+
 }

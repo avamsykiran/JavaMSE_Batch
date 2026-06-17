@@ -628,3 +628,187 @@ Implementing Budget-tracker
             Profiles
             Statement
             Txns
+
+OAuth2.0 
+-----------------------------------------------------------------------------------------------------------
+
+    OAuth 2.0 (Open Authorization) is the industry-standard framework used for authorization. It allows a website or application to access resources hosted by another application on behalf of a user, without ever exposing the user's login credentials (like their password).
+
+    The Core Problem It Solves
+        Before OAuth 2.0, if a third-party application (like a photo-printing website) wanted to access your photos from a cloud storage service (like Google Drive), you had to give that application your actual username and password.
+
+        This created massive security flaws:
+
+            The third-party app stored your password in plain text or reversible formats.
+            The app gained total access to your account, not just your photos.
+            To revoke access, we had to change your password, breaking integrations for all other apps.
+
+        OAuth 2.0 solves this by introducing an access token—a limited digital key that grants access only to specific data for a limited time.
+
+    Key Actors in OAuth 2.0
+        To understand how it works, imagine booking a stay at a modern hotel that uses electronic key cards.
+
+            The Resource Owner (The User): This is you. You own the data (e.g., your profile, photos, or email list) and control who gets access to it.
+
+            The Client (The Application): The third-party website or mobile app that wants to access your data (e.g., a smart calendar app wanting to access your Google Calendar).
+
+            The Authorization Server: The secure engine that verifies your identity, asks for your consent, and issues the access token (e.g., Google's login/identity system). Think of this as the hotel front desk.
+
+            The Resource Server: The API or database hosting the protected data you want to share. Think of this as your hotel room, which opens only when presented with the correct key card.
+
+    How it Works: The Authorization Code Flow
+        The most common way OAuth 2.0 operates in web applications is the Authorization Code Grant Type. Here is the step-by-step breakdown:
+
+            +--------+                               +---------------+
+            |        |--(A)- Authorization Request ->|   Resource    |
+            |        |                               |     Owner     |
+            |        |<-(B)-- Authorization Grant ---|   (User)      |
+            |        |                               +---------------+
+            |        |
+            |        |                               +---------------+
+            | Client |--(C)- Authorization Grant --->| Authorization |
+            |  App   |                               |    Server     |
+            |        |<-(D)----- Access Token -------|               |
+            |        |                               +---------------+
+            |        |
+            |        |                               +---------------+
+            |        |--(E)----- Access Token ------>|    Resource   |
+            |        |                               |     Server    |
+            |        |<-(F)--- Protected Resource ---|   (Your Data) |
+            +--------+                               +---------------+
+        
+        The Handshake (A & B): You click "Sign in with Google" on a gaming app. The app redirects your browser to Google’s secure login page. You log in directly with Google and see a prompt: "This app wants permission to view your email address." You click "Allow."
+
+        The Code Exchange (C & D): Google sends a temporary, short-lived Authorization Code back to the gaming app. The gaming app takes this code and sends it securely behind the scenes to Google's Authorization Server, along with its own private application secret key, to prove its identity.
+
+        The Token Delivery (E & F): Google validates the code and secret key, then issues an Access Token (usually formatted as a JWT or JSON Web Token).
+
+        Data Access: The gaming app presents this Access Token to the Google Calendar API. The API validates the token and sends over your calendar data. The app never saw your password.
+
+OAuth2.0 tailoring on Spring Boot Microservices
+-----------------------------------------------------------------------------------------------------------
+    
+    Implementing OAuth 2.0 in a Spring Boot Microservices architecture is a production standard for keeping services secure, decentralized, and stateless. Because microservices scale dynamically, standard session-based security won't work; instead, we rely on **JWT (JSON Web Tokens)** passed via the `Authorization: Bearer` header.
+
+    1. The Core Architecture
+
+        In a secure microservices pattern, roles are strategically divided across the infrastructure:
+
+        Identity Provider / Authorization Server:
+            Centralizes user credentials, issues JWT tokens, and exposes a Public Key (`jwks_uri`) for token validation (e.g., Keycloak, Auth0, Okta, or Spring Security Authorization Server).
+        
+        API Gateway (OAuth 2.0 Client):
+            Acts as the single entry point. It negotiates the OAuth 2.0 login flow with the Authorization Server and securely routes requests downstream.
+        
+        Downstream Microservices (Resource Servers):
+            Internal services that trust the JWT tokens. They validate incoming JWT signatures using the Authorization Server's public keys without needing a network database lookup.
+    
+    2. Implementing the API Gateway (OAuth2 Client)
+
+        The Gateway (built using Spring Cloud Gateway) handles user login and propagates the obtained JWT token to downstream services using a `TokenRelay` filter.
+
+        Dependencies (`pom.xml`)
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-gateway</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-oauth2-client</artifactId>
+            </dependency>
+        
+        Configuration (`application.yml`)       
+            server:
+                port: 8080
+
+            spring:
+                cloud:
+                    gateway:
+                        default-filters:
+                            - TokenRelay # Automatically forwards the OAuth2 access token downstream
+                        routes:
+                            - id: order-service
+                            uri: lb://order-service
+                            predicates:
+                                - Path=/orders/**
+
+                security:
+                    oauth2:
+                        client:
+                            registration:
+                                my-identity-provider:
+                                    client-id: gateway-client
+                                    client-secret: super-secret-key
+                                    scope: openid, profile, read
+                                    authorization-grant-type: authorization_code
+                                    redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+                        provider:
+                            my-identity-provider:
+                                issuer-uri: http://localhost:8081/realms/myrealm
+
+        Securing Internal Microservices (Resource Servers)
+
+            Downstream microservices don't need to know *how* the user logged in. They only check if the request contains a valid token and if that token has the appropriate scopes.
+
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+                </dependency>
+
+            Configuration (`application.yml`)
+
+                server:
+                    port: 8082
+
+                spring:
+                    security:
+                        oauth2:
+                            resource-server:
+                                jwt:
+                                    jwk-set-uri: http://localhost:8081/realms/myrealm/protocol/openid-connect/certs
+
+            Security Configuration Class
+
+                @Configuration
+                @EnableWebSecurity
+                public class SecurityConfig {
+
+                    @Bean
+                    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                        http
+                            .authorizeHttpRequests(authorize -> authorize
+                                .requestMatchers("/orders/public/**").permitAll()
+                                .requestMatchers("/orders/**").hasAuthority("SCOPE_read")
+                                .anyRequest().authenticated()
+                            )
+                            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+                            
+                        return http.build();
+                    }
+                }
+
+    4. Inter-Service Communication (Microservice to Microservice)
+
+        When `Order-Service` needs to call `Inventory-Service`, it has two architectural choices depending on context:
+
+        Option A: Token Propagation (On behalf of User)
+
+            If the downstream service needs to know who the original user is, extract the existing token from the security context and pass it forward using a Spring `WebClient` or `FeignInterceptor`:
+
+            @Bean
+            public WebClient webClient(OAuth2AuthorizedClientManager authorizedClientManager) {
+                ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 =
+                        new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
+                return WebClient.builder()
+                        .filter(oauth2)
+                        .build();
+            }
+        
+        Option B: Client Credentials Grant (System-to-System)
+
+            If the interaction is a pure backend background task completely unrelated to the active user, configure the microservice as an OAuth2 Client using the `client_credentials` grant type. It will fetch an independent system token directly from the Authorization Server to communicate with other resource servers.
