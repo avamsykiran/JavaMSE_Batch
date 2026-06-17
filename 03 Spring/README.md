@@ -864,5 +864,58 @@ Spring Security - Token Based Authentication - Role Based Authorization
                                             |
                                             |
                 <--RESP---------------------|
-
     
+    Access Control API
+
+        http
+            .authorizeHttpRequests(authorize -> authorize
+                // 1. Public assets and landing pages
+                .requestMatchers("/css/**", "/js/**", "/index.html", "/").permitAll()
+                
+                // 2. Anonymous-only endpoints (login/signup)
+                .requestMatchers("/login", "/register").anonymous()
+                
+                // 3. HTTP Method specific restrictions
+                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/products/**").hasAuthority("PRODUCT_WRITE")
+                
+                // 4. Role-based restrictions
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/management/**").hasAnyRole("ADMIN", "MANAGER")
+                
+                // 5. High-security areas requiring fresh login (No remember-me)
+                .requestMatchers("/api/billing/**").fullyAuthenticated()
+                
+                // 6. Absolute catch-all for anything else
+                .anyRequest().authenticated()
+            );
+
+            hasRole("ADMIN")        it is expected that the user must be having "ROLE_ADMIN" as a role
+                vs  
+            hasAuthorty("ADMIN")    it is expected that the user must be having "ADMIN" as a role
+    
+    Method Level Access Control
+
+        this works like a secure internal vault. (another layer of security)
+
+        using annotations like @PreAutorize and @PostAutorize, we can control ac ess
+        to specofic methods from controller/service/repos. To activate this we use
+        @EnableMethodSecurity on security-config calss.
+
+            @PreAuthorize("hasRole('ADMIN')")
+            public void deleteUser(Long id) { ... }
+
+            @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+            public void updateInventory() { ... }
+
+            @PreAuthorize("hasAuthority('SCOPE_write')")
+            public void BenefitData() { ... }
+        }
+            @PreAuthorize("#username == authentication.principal.username")
+            public UserProfile getProfile(String username) { ... }
+
+            @PostAuthorize("returnObject.owner == authentication.name or hasRole('ADMIN')")
+            public Account getAccountDetails(Long accountId) {
+                // Method runs and fetches the account from the database first
+                return accountRepository.findById(accountId); 
+            }

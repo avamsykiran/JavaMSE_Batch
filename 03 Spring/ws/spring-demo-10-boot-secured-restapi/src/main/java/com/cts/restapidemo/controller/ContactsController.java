@@ -37,7 +37,7 @@ public class ContactsController {
 	}
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	public ResponseEntity<Contact> getContactByIdAction(@PathVariable("id") int cid) throws ResourceNotFoundException {
 		Contact contact = contactService.getById(cid);
 		
@@ -49,7 +49,7 @@ public class ContactsController {
 	}
 		
 	@PostMapping
-	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Contact> addContactAction
 		(@RequestBody @Valid Contact contact, BindingResult bindingResult ) throws InvalidRequestBodyException {
 				

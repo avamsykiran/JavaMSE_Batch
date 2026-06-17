@@ -38,6 +38,7 @@ public class ContactServiceImpl implements ContactService {
 		return contactRepo.findAll();		
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public Contact update(Contact contact) {
 		if(contactRepo.existsById(contact.getContactId())) {

@@ -16,7 +16,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
   
 	//we can externalize these in application.properties
-    private static final String SECRET = "someEncryptionKey";
+    private static final String SECRET = "someEncryptionKeysomeEncryptionKeysomeEncryptionKeysomeEncryptionKeysomeEncryptionKeysomeEncryptionKeysomeEncryptionKey";
     private static final long EXPIRATION_TIME = 86400000; // 24 hours
 
     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());

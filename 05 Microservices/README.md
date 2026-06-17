@@ -24,11 +24,9 @@ MicroServices
         2. Integration
             a. inter-service communication
             b. distributed transaction
-            c. common url for a client-app to talk to the entire eco-system of microservices.
-            d. auto-scaling
-        3. Maintability
-        4. Monitoring 
-        5. Distributed Tracing
+            c. common url for a client-app to talk to the entire eco-system of microservices.                    
+        3. Monitoring 
+        4. Distributed Tracing
 
     Microservices Design Patterns
 
@@ -80,6 +78,7 @@ MicroServices
                             AccountHolder (Entity)
                                 accoountHolderId
                                 txns: Set<Txn>
+                                currentBal
 
                             Txn (Entity)
                                 dateOfTxn
@@ -181,7 +180,7 @@ MicroServices
                     will address all the other consiquitive request targetting that microservice.
 
                     When a request to the sme micro-service is inbound after the thrushold, then the
-                    circuit is half-closed, means that a new attemp to reach the microserivce is made,
+                    circuit is half-closed, means that a new atempt to reach the microserivce is made,
                             }|- on successful contact, the circuit is closed
                              |- or if that microservice is still unavailable, the circuit continues to be open.
 

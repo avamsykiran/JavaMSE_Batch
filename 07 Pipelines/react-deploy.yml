@@ -1,0 +1,80 @@
+name: ReactJS Production Build & Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # Cache global npm cache directory to bypass downloading duplicate dependencies
+    - name: Cache Node Modules
+      uses: actions/cache@v4
+      id: npm-cache
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Set up Node.js Runtime
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    # Clean install of exact lockfile dependencies
+    - name: Install Dependencies
+      run: npm ci
+
+    # Run frontend test configurations (Jest/React Testing Library)
+    - name: Execute Frontend Tests
+      run: npm test -- --watchAll=false --passWithNoTests
+
+    # Compiles and optimizes assets into a production-ready `/build` or `/dist` folder
+    - name: Compile Production Build
+      run: npm run build
+      env:
+        REACT_APP_API_URL: "https://api.productionserver.com" # Injecting environment variables
+
+    # Zip up the compiled static assets so the next deployment step can access them
+    - name: Upload Production Assets
+      uses: actions/upload-artifact@v4
+      with:
+        name: production-build-assets
+        path: build/  # Change to 'dist/' if you're using Vite instead of CRA
+
+  deploy-to-hosting:
+    needs: build-frontend
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download Compiled Assets
+      uses: actions/download-artifact@v4
+      with:
+        name: production-build-assets
+        path: ./dist
+
+    # --- CHOOSE YOUR HOSTING DEPLOYMENT STEP BELOW ---
+
+    # Example Option A: Deploying straight to AWS S3 Bucket
+    # - name: Deploy to AWS S3
+    #   uses: jakejarvis/s3-sync-action@master
+    #   with:
+    #     args: --follow-symlinks --delete
+    #   env:
+    #     AWS_S3_BUCKET: 'my-react-web-bucket'
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     SOURCE_DIR: './dist'
+
+    # Example Option B: Push directly to GitHub Pages
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist

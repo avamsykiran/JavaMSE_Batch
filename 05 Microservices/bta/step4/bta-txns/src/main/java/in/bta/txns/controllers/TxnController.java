@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.bta.txns.entities.AccountHolder;
 import in.bta.txns.entities.Txn;
 import in.bta.txns.exceptions.AccountHolderException;
 import in.bta.txns.exceptions.TxnException;
@@ -30,6 +31,11 @@ public class TxnController {
 
 	@Autowired
 	private TxnService txnService;
+
+	@GetMapping("/balances")
+	public ResponseEntity<List<AccountHolder>> getBalances() throws AccountHolderException{
+		return ResponseEntity.ok(txnService.getAllAccounts());
+	}
 	
 	@GetMapping("/{ahId}/balance")
 	public ResponseEntity<Double> getBalance(@PathVariable("ahId")Long ahId) throws AccountHolderException{

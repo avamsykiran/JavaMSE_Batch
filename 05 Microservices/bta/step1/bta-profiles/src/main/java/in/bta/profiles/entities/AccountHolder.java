@@ -12,6 +12,7 @@ import javax.validation.constraints.Pattern;
 @Entity
 @Table(name = "ahs")
 public class AccountHolder {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long ahId;

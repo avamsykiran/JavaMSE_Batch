@@ -106,4 +106,9 @@ public class TxnServiceImpl implements TxnService {
 		return ah==null?0:ah.getCurrentBalance();
 	}
 
+	@Override
+	public List<AccountHolder> getAllAccounts() {
+		return ahRepo.findAll();
+	}
+
 }

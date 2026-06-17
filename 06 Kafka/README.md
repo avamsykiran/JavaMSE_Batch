@@ -1,45 +1,42 @@
 Kafka
 ----------------------------------------------------------------
-
-    Agenda
-    -----------------
-
-        Main 1: Apache Kafka Baics                                         
-                    What is Kafka? 
-                    Kafka Features
-                    Kafka Concepts
-                    Kafka Architecture                                      
-                    Kafka Components 
-                    Kafka Installation
-                    Kafka Cluster 
-                    Types of Kafka Clusters
-                    Configuring Single Node Single Broker Cluster  
-        Main 2: Kafka Producer                                              
-                    Constructing a Kafka Producer 
-                    Sending a Message to Kafka 
-                    Producing Keyed and Non-Keyed Messages  
-                    Sending a Message Synchronously & Asynchronously 
-                    Configuring Producers 
-                    Serializers 
-                    Partitions 
-        Main 3: Kafka Consumer                                              
-                    Consumers and Consumer Groups 
-                    Standalone Consumer 
-                    Consumer Groups and Partition Rebalance 
-                    Creating a Kafka Consumer 
-                    Subscribing to Topics 
-                    Deserializers 
         
     Lab SetUp
     -----------------------
         STS/Eclipse IDE
         Java 8
         Kafka
-        Zookeeper
+        Zookeeper (not needed in the latest version)
 
     What and Why ?
 
         + Distrubuted Event Progression or Message Broadcasting System.
+
+            Event Driven Design Pattern
+
+                Service1 (SalesMicroService)
+                    will generate events and pass them to a E-P/Msg-Broadcasting System
+
+                        (SalesMicroService)
+                            After making a sale of an AC, raise AC#001 sold event
+                            After making a sale of an Cycle, raise Cycle#002 sold event
+                            After making a sale of an TV, raise TV#003 sold event
+
+                E-P/Msg-Broadcasting System (kafka)
+                    Will maintain a queue of all the events raised
+
+                    SalesQueue [AC#001 sold, Cycle#002 sold,TV#003 sold]
+
+                Service2
+                    will listen to the queue and is notified every time an event is queued.
+                    service will have to react/respond accordingly.
+
+                        (InventoryMicroService)
+                            in response to
+                                AC#001 sold --> AC-Stock is updated
+                                Cycle#002 sold --> Cycles Stock is updated
+                                TV#003 sold --> TV-Stock is updarted
+
         + It means that Kafka can facilitate two completely isolated non-similar
             application to communicate withe one another.
 
@@ -49,7 +46,7 @@ Kafka
             In context to bigdata
             and so on.....
 
-        + Kafka can be configured on a single clustur or a multiple - clustur
+        + Kafka can be configured on a single node clustur or a multiple node clustur
         + Kafka can be used in any scale of utility
     
     Message Driven System
@@ -80,7 +77,7 @@ Kafka
                 in a chatting application, a message is 'some text'
                 in CQRS , a message is 'an event' or 'a command'
 
-        Topic           is a logical identifier for a group of messages.
+        Topic       is a logical identifier for a group of coherent messages.
 
         Publish     the process of sending message by a producer is called publishing.
                     a producer PUBLISHES messages to a TOPIC
@@ -90,47 +87,74 @@ Kafka
 
     Apcche Kafka ---------> Pub-Sub Messaging System
     ---------------------------------------------------------------------------------
-
-            Installation
+            Kafka 2.4.x or earlier
             ------------------------------------------------------------------------
-                dependency:     Java 8
-                download: https://kafka.apache.org/downloads  Scala - 2.13 (tgz)
+                Installation 
+                ------------------------------------------------------------------------
+                    dependency:     Java 8
+                    download: https://kafka.apache.org/downloads  Scala - 2.13 (tgz)
 
-                Extract it to drive:/kafka
+                    Extract it to drive:/kafka
 
-                create folder drive:/kafka/data/zookeeper       //state maintanence
-                create folder drive:/kafka/data/kafka           //kafka server logs
+                    create folder drive:/kafka/data/zookeeper       //state maintanence
+                    create folder drive:/kafka/data/kafka           //kafka server logs
 
-                open drive:/kafka/config/zookeeper.properties
-                set the below prop:
-                        dataDir=drive:/kafka/data/zookeeper
+                    open drive:/kafka/config/zookeeper.properties
+                    set the below prop:
+                            dataDir=drive:/kafka/data/zookeeper
 
-                open drive:/kafka/config/server.properties
-                set the below prop:
-                       log.dirs=drive:/kafka/data/kafka
+                    open drive:/kafka/config/server.properties
+                    set the below prop:
+                        log.dirs=drive:/kafka/data/kafka
 
-                INSTALLATION IS DONE
+                    INSTALLATION IS DONE
 
-            Start Up
+                Start Up
+                ------------------------------------------------------------------------
+
+                    Start ZooKeeper (if zookeeper is available)
+                        drive:\kafka\bin\windows>zookeeper-server-start.bat ../../config/zookeeper.properties
+
+                    Start Kafka
+                        drive:\kafka\bin\windows>kafka-server-start.bat ../../config/server.properties
+                    
+                Shut Down
+                -------------------------------------------------------------------------
+
+                    shutdown kafka first and then shutdown zookeeper
+
+                    ctrl+c on the server console, shuts the server down.
+
+            Kafka 2.4.x or later
             ------------------------------------------------------------------------
+                Installation 
+                ------------------------------------------------------------------------
+                    dependency:     Java 17
+                    download:       https://kafka.apache.org/downloads   kafka_2.13-4.3.0.tgz
 
-                Start ZooKeeper
-                    drive:\kafka\bin\windows>zookeeper-server-start.bat ../../config/zookeeper.properties
+                    Extract it to drive:/kafka
 
-                Start Kafka
-                    drive:\kafka\bin\windows>kafka-server-start.bat ../../config/server.properties
+                    drive:\kafka\bin\windows> kafka-storage.bat random-uuid
+                            The above generates a UUID to be used as CLUSTUR_ID
 
-            Shut Down
-            -------------------------------------------------------------------------
+                    drive:\kafka\bin\windows> kafka-storage.bat format --standalone -t YOUR_CLUSTER_ID_HERE -c ../../config/server.properties
+                    
+                    INSTALLATION IS DONE
 
-                shutdown kafka first and then shutdown zookeeper
+                Start Up
+                ------------------------------------------------------------------------
 
-                ctrl+c on the server console, shuts the server down.
+                    drive:\kafka4\bin\windows>kafka-server-start.bat ../../config/server.properties
+
+                Shut Down
+                -------------------------------------------------------------------------                    
+
+                    ctrl+c on the server console, shuts the server down.
 
             Archetecture
             -------------------------------------------------------------------------
                                             Kafka Eco System
-                                              Clustur1
+                                              Clustur
                                                 Broker1
                 Producer ---message----→            TopicA              ----message---► Consumer Group
                                                         Partition1                              Consumer1
@@ -178,9 +202,9 @@ Kafka
                 Partition?
                         1. a topic can be split into any number of partiions.
                         2. each partition can hold any number of messages.
-                        3. there is limit on number of partitions.
+                        3. there is a limit on number of partitions.
                         4. the partition is selected to hold a message randomly, as long as the 
-                           message has no assosiate key from the producer.
+                           message has no assosiated key from the producer.
                         5. If the producer assosiates a message with a key, the partition
                             related to the key is selected/created and the message is pushed in it.
                         6. Each broker will have a copy of the partition and those copies
@@ -188,7 +212,7 @@ Kafka
                         7. Every broker need not have every partition or its replicas.
                         8. A partition is masterly managed by one of these brokers and is called
                                 the leader and other broker having the replicas are called followers.
-                        9. The availability is ensured, as if the leader falls, the next follower will
+                        9. The availability is ensured; as and when the leader falls, the next follower will
                                 becoem the leader automatically.
 
                             assuming replica-factor = 2
@@ -200,7 +224,7 @@ Kafka
 
                 TopicA P1   has Broker1 as leader and Broker4 as follower
 
-                if Broekr 1 falls .....
+                if Broker 1 falls .....
 
                         assuming replica = 2
 
@@ -214,20 +238,33 @@ Kafka
                         
             offset?
 
-                is a serial number maintained by the zookeeper for 
-                messages and consuemrs, to remeber, what is the 
+                is a serial number maintained (by the zookeeper in versions earleir to 2.4.x) 
+                for messages and consuemrs, to remeber, what is the 
                 last message consumed by a consumer in  a consumer group.
+
+                Kafka (later to 2.4.x) works without ZooKeeper using KRaft (Kafka Raft), a built-in consensus mechanism. Instead of relying on an external service to manage cluster state and metadata, Kafka now assigns these responsibilities to internal nodes acting as "controllers"
 
     Kafka API
     =================================================================================
 
         Producer API        api for a producer to interact with Kafka
         Consumer API        api for a consumer to interact with Kafka
-        Stream API          api allows the processing of the vents received on kafka,
+        Stream API          api allows the processing of the events received on kafka,
         Connector API       api can interact with an underlying perssitant api
                             to act like an automatic producer or consumer.
 
-    Kafka CLI
+        Producer produces messages (in xml)
+                            |--- KAFKA---------|
+                                    |-> STREAM (converts xml tp json)
+                                            |-> Consumer (consumes msgs in json)
+        
+        Producer produces messages (in xml)
+                    |-> STREAM (converts xml to json)
+                            |--- KAFKA---------|
+                                    |-> Consumer (consumes msgs in json)
+
+
+    Kafka CLI (earlier to 2.4.x)
     =================================================================================
 
         bunch of .bat/.sh files are available as kafka cli tools,
@@ -247,6 +284,19 @@ Kafka
         Kafka-console-consumer  -bootstrap-server localhost:9092 -topic topicName --from-beginning
 
         Kafka-console-consumer  -bootstrap-server localhost:9092 -topic topicName --from-beginning -property print.key=true -property key.separator=:
+
+    Kafka CLI (later to 2.4.x)
+    =================================================================================
+
+        kafka-topics --bootstrap-server localhost:9092 --create --topic my-first-topic --partitions 3 --replication-factor 1
+
+        kafka-topics --bootstrap-server localhost:9092 --list
+
+        kafka-console-producer --bootstrap-server localhost:9092 --topic my-first-topic
+
+        kafka-console-consumer --bootstrap-server localhost:9092 --topic my-first-topic --from-beginning
+
+        kafka-console-consumer --bootstrap-server localhost:9092 --topic my-first-topic --from-beginning --property print.key=true --property key.separator=:
 
     Working with Kafka on Java
     ===========================================================================
@@ -384,3 +434,6 @@ CQRS on Microservices
                             .orElseThrow(() -> new RuntimeException("Order not found in read model"));
                 }
             }
+
+To Install WMIc:
+    Run PowerShell as an administrator and type: add-WindowsCapability -online -name WMIC

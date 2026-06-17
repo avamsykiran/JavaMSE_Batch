@@ -458,7 +458,7 @@ Collections
             .step1( anOperation )
             .step2( anotherOperation )
 
-            operations are themselves are functions.
+            operations are themselves  functions.
 
         Assuming we have a lis tof employees 'emps'. Now We need to compute the experience of each employee
         and we have to retrive t=only those employees having minimum 10 yrs iof experience.
@@ -500,11 +500,12 @@ Collections
 
             java.util.function  offers a list of functional interfaces. 
                 
-                Supplier       that the method of this functional interface has no-args but returns a value
-                Consumer       that the method of this functional interface has args but no return value
-                Operator       that the method of this functional interface has args and returns a value
-                Predicate      that the method of this functional interface returns boolean 
-
+            Nomunculature:
+                    1. Supplier<T>      : T get()           has a method that returns a value but has no-args
+                    2. Consumer<T>      : void accept(T t)  has a method that takes an argument and returns void
+                    3. Function<T, R>   : R apply(T t)      has a method that takes an argument and returns a value
+                    4. Predicate<T>     : boolean test(T t) has a method that takes an argument and returns a boolean
+                
             Functional interface are introduced to promote functional programming in java.
 
             Functional interfaces can be implemented using a inline-function-syntax called Lambda Expressions.

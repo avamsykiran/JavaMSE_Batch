@@ -7710,3 +7710,56 @@ org.eclipse.core.runtime.CoreException: Variable references non-existent resourc
 2025-12-24 11:36:55,110 [Worker-10: Launching spring-demo-10-boot-secured-restapi] INFO  o.eclipse.m2e.core.internal.Bundles - 	Entry: C:\sts-4.17.2.RELEASE\plugins\javax.annotation_1.3.5.v20221112-0806.jar
 2025-12-24 11:36:55,112 [Worker-10: Launching spring-demo-10-boot-secured-restapi] INFO  o.e.m.i.launch.MavenLaunchDelegate - Run build in "E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-10-boot-secured-restapi":
 2025-12-24 11:36:55,117 [Worker-10: Launching spring-demo-10-boot-secured-restapi] INFO  o.e.m.i.launch.MavenLaunchDelegate -  mvn  -B -Dstyle.color=always clean compile
+2026-05-15 10:11:47,823 [Worker-4: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2026-05-18 09:10:23,719 [Worker-6: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2026-05-18 09:10:25,735 [Worker-6: Building] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2026-05-18 09:10:25,744 [Worker-6: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2026-05-18 09:10:25,755 [Worker-6: Building] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2026-05-18 09:10:25,756 [Worker-6: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2026-05-18 09:10:26,508 [Worker-6: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-18 09:10:26,524 [Worker-6: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-18 09:10:26,526 [Worker-6: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-02-boot\src\test\resources
+2026-05-18 09:10:27,596 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-18 09:10:27,633 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-18 09:10:27,635 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-03-boot\src\test\resources
+2026-05-18 09:10:27,876 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-18 09:10:27,900 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-18 09:10:27,902 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-04-boot-profiles\src\test\resources
+2026-05-18 09:10:28,202 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-18 09:10:28,234 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-18 09:10:28,236 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-05-boot-data-jpa\src\test\resources
+2026-05-18 09:10:28,589 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-18 09:10:28,610 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-18 09:10:28,614 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-06-boot-data-mongo\src\test\resources
+2026-05-18 09:10:28,963 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-18 09:10:28,991 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-18 09:10:28,993 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-07-boot-restapi\src\test\resources
+2026-05-18 09:10:29,274 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-18 09:10:29,289 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-18 09:10:29,291 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-08-boot-reactive-rest-api\src\test\resources
+2026-05-18 09:10:29,995 [Worker-2: Building] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.cts:spring-demo-08-boot-reactive-rest-api:0.0.1-SNAPSHOT @ E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-08-boot-reactive-rest-api\pom.xml.
+2026-05-18 09:10:30,232 [Worker-2: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-18 09:10:30,236 [Worker-2: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-18 09:10:30,237 [Worker-2: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-08-boot-reactive-rest-api\src\test\resources
+2026-05-18 09:10:30,549 [Worker-2: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-18 09:10:30,555 [Worker-2: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-18 09:10:30,557 [Worker-2: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-09-boot-reactive-rest-client\src\test\resources
+2026-05-18 09:10:31,056 [Worker-2: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-18 09:10:31,076 [Worker-2: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-18 09:10:31,077 [Worker-2: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-10-boot-secured-restapi\src\test\resources
+2026-05-18 11:46:48,755 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-18 11:46:48,760 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-18 11:46:48,761 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-10-boot-secured-restapi\src\test\resources
+2026-05-18 11:58:23,782 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-18 11:58:23,786 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-18 11:58:23,787 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-10-boot-secured-restapi\src\test\resources
+2026-05-19 09:06:20,292 [Worker-13: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2026-05-19 10:10:22,817 [Worker-15: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-19 10:10:22,824 [Worker-15: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-19 10:10:22,826 [Worker-15: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-10-boot-secured-restapi\src\test\resources
+2026-05-19 10:10:58,023 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-19 10:10:58,026 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-19 10:10:58,027 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-10-boot-secured-restapi\src\test\resources
+2026-05-19 10:27:15,011 [Worker-28: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2026-05-19 10:27:15,016 [Worker-28: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2026-05-19 10:27:15,017 [Worker-28: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory E:\ongoing\JavaFSE\03 Spring\ws\spring-demo-10-boot-secured-restapi\src\test\resources

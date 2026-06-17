@@ -34,6 +34,7 @@ public class StatementServiceImpl implements StatementService {
 		AccountHolder ah = profilesClient.getAccountHolder(ahid);
 		List<Txn> txns = txnsClient.getTxns(ahid, start, end);
 		ah.setCurrentBalance(txnsClient.getBalance(ahid));
+		
 		double totalCredit=computeTotal(txns, TxnType.CREDIT);
 		double totalDebit=computeTotal(txns, TxnType.DEBIT);
 		double statementBalance = totalCredit-totalDebit;
