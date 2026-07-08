@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: spring-demo-06-boot-data-mongo
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/my_spring_db

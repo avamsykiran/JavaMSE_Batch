@@ -41,7 +41,7 @@ Java SE
             via fields and methods.
 
             object is a variable of class type.
-            
+
         Encapsulation
 
             is to provide indirect access to the core fields and methods. (data-hiding)
@@ -54,11 +54,112 @@ Java SE
                 (b) a private field with only getter is a readonly field
                 (c) a private field with only setter is a writeonly field
                 (d) a private field with both getter and setter is a completly accessable field
+             
+            public class Student {
+                private int rollNum;
+                private String fullName;
+                private double fee;
+
+                public Student(){
+                //default constructor   
+                }
+
+                public Student(String fullName,double fee){
+                    //paramatrized constuctor
+
+                }
                 
+                public Student(int rollNum,String fullName,double fee){
+                    //paramatrized constuctor
+
+                }
+
+                public Student(Student s){
+                    //copy constructor
+                    
+                }
+
+                public int getRollNum(){
+                    return rollNum;
+                }
+
+                public void setRollNum(int rollNum){
+                    this.rollNum=rollNum;
+                }
+            }
+
+            Student s = new Student(); 
+
+            1. read only
+                class Dummy {
+                    private int x;
+
+                    public int getX(){
+                        return x;
+                    }
+                }
+                
+            2. write only
+                class Dummy {
+                    private int x;
+
+                    public void setX(int x){
+                        this.x=x;
+                    }
+                }
+
+            3. read-write
+                class Dummy {
+                    private int x;
+
+                    public int getX(){
+                        return x;
+                    }
+
+                    public void setX(int x){
+                        this.x=x;
+                    }
+                }
+
+            Types of Classes
+
+                POJO        Plain Old Java Object
+
+                            is any java class that has
+                                1. all data members are private
+                                2. Has a default constructor 
+                                3. Has a paramatrized constuctor optionally
+                                4. getter, setter for all the private data members
+
+                DTO/Model   is any POJO that represents a domain-entity liek Student, BankAccount, Employee, ...etc.,
+                            and must ovveride the following three emthods from java.lang.Object class
+                                1. hashcode
+                                2. equals
+                                3. toString
+
+                Entity      is any model that is mapped to a database table using any ORM library .
+
+                Service     is any POJO that offers bussiness logic
+
+                UI          is any POJO that offers User-Interaction through command lione interface
+
+                Controller  is any POJO that offers control of flow of execution in an application.
+
+                DAO         Data Access Object
+                            is any POJO that offers database related logic liek
+                                retriviong records
+                                adding a record
+                                deleting a record or
+                                updating a record
+
+                Repository  is any DAO that uses a ORM library to talk to a database.
+   
         Polymorphsim
 
             overlaoding
-                method of the smae scope having same name but different arg-list.
+                method of the same scope(either same class or to a super and a sub class) 
+                having same name but different 
+                arg-list (either arg-type or arg-count or both).
 
                 class Monkey {
                     public void eat(Fruit fruit){
@@ -76,18 +177,30 @@ Java SE
 
             overriding
 
-                methods from a super and a sub type, have exactly the same signature (retrunType anme and arg-list)
+                methods from a super and a sub type, have exactly the same signature (retrunType name and arg-list)
 
                 class Human extends Monkey {
                     public void eat(Fruit fruit){
                         wash(fruit);
                         Piece[] pieces = cut(fruit);
-                        for(Piece p : pieces{
-                            byteAndChewAndSwallow(p);
+                        for(Piece p : pieces){
+                            chewAndSwallow(p);
                         }
-                    }
-                   
+                    }                   
                 }
+
+            Method Resolution
+
+                Fruit f = new Friut();
+                IceCream i = new IceCream();
+
+                Monkey m = new Monkey();
+                Human h = new Human();
+
+                m.eat(f);   //Monkey::eat having Fruit type arg
+                h.eat(f);   //Human::eat having Fruit type arg
+                m.eat(i);   //Monkey::eat having IceCream type arg
+                h.eat(i);   //Monkey::eat having IceCream type arg
 
             Constructor Overloading
 
@@ -155,7 +268,6 @@ Java SE
                                 Employee (empId,name,sal) <-|
                                                             |<-- Manager (...,hra)
 
-
                 Hybrid                                      |<-- ContractEmployee (...,contractDuration)
                                 Employee (empId,name,sal) <-|
                                                             |<-- Manager (...,hra) <--- Director (..,share)
@@ -175,7 +287,6 @@ Java SE
                 Manager m1 = (Manager) e2;
                 Manager m2 = (Manager) e1; //ClassCastException
 
-
         Abstraction
 
             Abstraction means declaring but not implementing.
@@ -192,21 +303,24 @@ Java SE
                         |<-Student
                         |<-Teacher
                         |<-NonTeachingStaff
-                
+
             Interface               is a user defiend data type that has no fields.
                                     generally interfaces represent roles.
                                     multiple interfaces can be implemented by one class.
 
-            To Create a UserDefiendType
+            To Create an abstract UserDefiendType
                         ↓
                         Does it has fields ?    ------- NO ----> create UDT as interface
                                 |
                                 | YES
                                 ↓         
-                                create UDT as class
+                                create UDT as an abstract class
 
             Abstract Method         is a method that does not have an implementation.
                                     only abstract classes and interfaces can have an abstract method.
+
+                        both interfaces and abstract classes can also accomidate 
+                        'abstract functions', but it is not mandate.
 
             abstract class Animal
                 |
@@ -255,7 +369,7 @@ Java SE
                                     }
                                 }
     
-        CHECKED_Exceptions      are supposed to be handled using try..cath or are supposed to be thrown to 
+        CHECKED_Exceptions      are supposed to be handled using try..catch or are supposed to be thrown to 
                                 the caller method using 'throws' keyword.
 
             try{
@@ -273,7 +387,7 @@ Java SE
             }catch(ExceptionType1 | ExceptionType2 exp){
                 
             } ... finally {
-                //is used to ensure that any closable onbjects are closed.
+                //is used to ensure that any closable objects are closed.
             }
 
             try( /*declare closable object like files or connections */ ) {
@@ -301,16 +415,18 @@ Java SE
 
 Data Time API
 
-    java.time               Factiory Methods
+    java.time               Factory Methods
         LocalTime           .now(),.of(hour,min,second)
         LocalDate           .now(),.of(year,MON,day)
         LocalDateTime       .now(),.of(year,MON,day,hour,min,second)    
         ZonedDateTime       .now(zoneId),.of(year,MON,day,hour,min,second,zoneId)    
 
+        ZoneId              .of("GMT+5")
+
         Period              .between(startDate,endDate)
         Durtion             .between(startTime,endTime)
 
-        DateTimeFormatter   .ofPattern("")
+        DateTimeFormatter   .ofPattern("dd-MM-yyyy")
 
 Generics
 
@@ -340,6 +456,7 @@ Generics
                 sw1.doSwap(s1,s2);
 
                 int x=89,y=45;
+                //Swapper<int> sw2 = new Swapper<>(); generics do not support native types.
                 Swapper<Integer> sw2 = new Swapper<>();
                 sw2.doSwap(x,y);
             }
@@ -409,12 +526,23 @@ Collections
                 is the custom comparision
             public abstract int compare(Object 0bj1,Object obj2)
 
-            class EmpoyeeFullnameComparator implements Compartor<Employee> {
+            class EmpFullnameComparator implements Compartor<Employee> {
                 @Override
                 public int compare(Employee emp1,Employee emp2) {
-                    return emp1.getFullName().compareTo(emp2.getFullName())
+                    return emp1.getFullName().compareTo(emp2.getFullName());
                 }
             }
+
+             class EmpSalaryComparator implements Compartor<Employee> {
+                @Override
+                public int compare(Employee emp1,Employee emp2) {
+                    return ((Double)emp1.getSalary()).compareTo(emp2.getSalary());
+                }
+            }
+
+        Collections.sort(empList);  //natual comparision will work. meaning emps are sorted on empId
+        Collections.sort(empList,new EmpFullnameComparator());  //custom comparision will work. meaning emps are sorted on fullName
+        Collections.sort(empList,new EmpSalaryComparator());  //custom comparision will work. meaning emps are sorted on salary
 
         Concurrent Maps
 
@@ -442,7 +570,6 @@ Collections
                     Uses a Skip List data structure, which provides O(log N) performance for most 
                     operations while supporting highly concurrent access. 
                     Used when we want to allow concurrency and sorted order.
-
 
     Funtional Interfaces and Lambda Expressions and Method Referencing and Streams API
     ----------------------------------------------------------------------------------------
@@ -489,9 +616,10 @@ Collections
             Thrid Approach - Functional Programming
 
                 emps.stream
-                        .compute        //to compute experience
+                        .map            //to compute experience
                         .filter         //to check and filter on experiecne                        
                         .filter         //to check and filter on salary                        
+                        .map            //to create fullName by adding first-name with last-name
                         .collect        //to collect only the filtered records into a new list
 
         Functional interface are those that have only one abstract emthod.
@@ -501,16 +629,17 @@ Collections
             java.util.function  offers a list of functional interfaces. 
                 
             Nomunculature:
-                    1. Supplier<T>      : T get()           has a method that returns a value but has no-args
-                    2. Consumer<T>      : void accept(T t)  has a method that takes an argument and returns void
-                    3. Function<T, R>   : R apply(T t)      has a method that takes an argument and returns a value
-                    4. Predicate<T>     : boolean test(T t) has a method that takes an argument and returns a boolean
-                
+                1. Supplier<T>      : T get()           has a method that returns a value but has no-args
+                2. Consumer<T>      : void accept(T t)  has a method that takes an argument and returns void
+                3. Function<T, R>   : R apply(T t)      has a method that takes an argument and returns a value
+                4. Predicate<T>     : boolean test(T t) has a method that takes an argument and returns a boolean
+            
             Functional interface are introduced to promote functional programming in java.
 
             Functional interfaces can be implemented using a inline-function-syntax called Lambda Expressions.
 
             FunctionInterface obj = (paramsList) -> returnValueExpression
+            
             FunctionInterface obj = (paramsList) -> {
                 //an implementation
                 retrun value;
@@ -544,10 +673,14 @@ Collections
             Stream s3 = set.stream();
             Stream s4 = Arrays.stream(array);
 
+            Note: A stream once consuemd can not be reused.
+
             Terminal Operations
                 are methods of Stream class that do not return a new Stream
+                after a terminal operation we can not chain another operation.
 
                 forEach(consumer)       executes the consumer on each and every element of the stream
+                                        and returns void.
 
                 reduce(BinaryOperator)  executes the binary-operator cumilatively on all the elements of the stream
                                         returns the final result wrapped inside Optional class.
@@ -557,6 +690,7 @@ Collections
                     String<Integer> s1 = Stream.of(10,20,30,40,50);
                     BinaryOperator<Integer> sum =  (a,b) -> a+b ;
                     Optional<Integer> result = s1.reduce(sum); // sum(sum(sum(sum(10,20),30),40),50), so resutl is 150
+                    Integer result = s1.reduce(sum,0); // sum(sum(sum(sum(sum(0,10),20),30),40),50), so resutl is 150
 
                 collect(Collector)      Collector is an interface in java.util.stream that is used to read data
                                         from a stream and write it into any other data-source.

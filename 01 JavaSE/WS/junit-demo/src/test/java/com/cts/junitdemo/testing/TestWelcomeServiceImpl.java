@@ -38,7 +38,7 @@ public class TestWelcomeServiceImpl {
 	}
 	
 	@Test
-	@DisplayName("should throw InvalidUSerNameException when greet(null) is called")
+	@DisplayName("should throw InvalidUserNameException when greet(null) is called")
 	void testGreetWhenANullUserNAmeIsProvided() {
 		String testData = null;		
 		

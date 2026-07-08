@@ -30,4 +30,6 @@
     <fullyQualifiedTypeName name="java.util.function.Supplier"/>
     <fullyQualifiedTypeName name="com.cts.javasedemo.models.Employee"/>
     <fullyQualifiedTypeName name="java.util.InputMismatchException"/>
+    <fullyQualifiedTypeName name="com.cts.javasedemo.models.Student"/>
+    <fullyQualifiedTypeName name="com.cts.javasedemo.models.Hostler"/>
 </qualifiedTypeNameHistroy>

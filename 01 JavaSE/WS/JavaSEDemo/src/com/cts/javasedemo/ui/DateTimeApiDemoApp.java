@@ -21,7 +21,7 @@ public class DateTimeApiDemoApp {
 		Period experience = Period.between(joinDate, today);
 		
 		System.out.println("Exprience: " + experience.getYears() + " yrs approx");
-		System.out.println("Exprience: " + (experience.toTotalMonths()/12.0) + " yrs");
+		System.out.println("Exprience: " + (experience.toTotalMonths()/12.0) + " yrs exactly");
 
 		scan.close();
 	}

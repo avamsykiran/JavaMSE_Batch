@@ -27,7 +27,8 @@ public class StreamsAPIDemo {
 		
 		System.out.println("-----------------------------------------------------------------");
 		
-		Optional<Employee> result = emps.stream().reduce( (e1,e2) -> e1.getSalary()>e2.getSalary()?e1:e2 );
+		Optional<Employee> result = 
+				emps.stream().reduce( (e1,e2) -> e1.getSalary()>e2.getSalary()?e1:e2 );
 		
 		if(result.isPresent()) {
 			System.out.println(result.get());
@@ -51,7 +52,9 @@ public class StreamsAPIDemo {
 		emps.stream()
 			.filter( e -> e.getSalary()>=50000)
 			.map(e -> e.getFullName())
-			.filter( fnm -> fnm.endsWith("a") || fnm.endsWith("e") || fnm.endsWith("i") || fnm.endsWith("o") || fnm.endsWith("u") )
+			.filter( 
+					fnm -> fnm.endsWith("a") || fnm.endsWith("e") || fnm.endsWith("i") 
+					|| fnm.endsWith("o") || fnm.endsWith("u") )
 			.forEach(System.out::println);
 		
 		System.out.println("-----------------------------------------------------------------");
