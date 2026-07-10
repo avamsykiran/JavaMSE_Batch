@@ -1,0 +1,70 @@
+package com.cts.restapidemo;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDate;
+
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+
+import com.cts.restapidemo.entities.Contact;
+import com.cts.restapidemo.repos.ContactRepo;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(
+		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, 
+		classes = SpringDemo06BootWebmvcApplication.class)
+@AutoConfigureMockMvc
+public class ContactControllerIntegrationTest {
+
+	@Autowired
+	private MockMvc mvc;
+
+	@Autowired
+	private ContactRepo repo;
+	
+	Contact testData;
+
+	@BeforeEach
+	void setUp() {
+		testData = repo.save(new Contact(null, "Vamsy", "1234512345", "vamsy@gmail.com", LocalDate.of(1985, 6, 11)));
+		repo.flush();
+	}
+	
+	@AfterEach
+	void tearDown() {
+		repo.deleteAll();
+		repo.flush();	
+		testData=null;
+	}
+
+	@Test
+	public void getContactsListAction_test() throws Exception {
+		mvc.perform(get("/contacts").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(jsonPath("$", Matchers.hasSize(1)));
+	}
+
+	@Test
+	public void getByIdAction_test_givenExisitngId() throws Exception {
+		mvc.perform(get("/contacts/"+testData.getContactId()).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.fullName").value(testData.getFullName()));
+	}
+
+	@Test
+	public void getByIdAction_test_givenNonExisitngId() throws Exception {
+		mvc.perform(get("/contacts/2001").contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isNotFound());
+	}
+
+}

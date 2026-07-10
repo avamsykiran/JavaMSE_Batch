@@ -1,0 +1,19 @@
+server:
+  port: 9999
+
+spring:
+  application:
+    name: spring-boot-restapi-demo
+  
+  datasource:
+    url: jdbc:h2:file:./adbdata/mydb
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+    
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update

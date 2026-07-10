@@ -1,0 +1,50 @@
+package com.cts.restapidemo;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.Arrays;
+import java.util.List;
+
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+
+import com.cts.restapidemo.controller.ContactsController;
+import com.cts.restapidemo.entities.Contact;
+import com.cts.restapidemo.services.ContactService;
+
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(ContactsController.class)
+public class ContactControllerUnitTest {
+
+	@Autowired
+	private MockMvc mvc;
+	
+	@MockitoBean
+	private ContactService contactService;
+	
+	@Test
+	public void getContactsListAction_test() throws Exception {
+		List<Contact> contacts = Arrays.asList(
+				new Contact(101, "Vamsy", "1234123412","vamsy@gmail.com",LocalDate.of(1985, Month.JULY, 10)));
+		
+		Mockito.when(contactService.getAll()).thenReturn(contacts);
+		
+		mvc.perform(get("/contacts").contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$", Matchers.hasSize(1)));				
+	}
+	
+	
+}

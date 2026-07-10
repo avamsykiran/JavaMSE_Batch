@@ -749,7 +749,14 @@ Collections
 
             Database    <----->     APP     <------>    EndUsers
 
+            Multi-Layer Arch (mostly employeed in console-based apps)
             Database    <----->[ DAO --(model)--- Service --(model)---- UI ]]<------>    EndUsers
+                        
+            MVC Arch (employeed in dynamic-web apps)
+            Database <-->[ (Entities) <--> Repo --(model)--- Service --(model)- Controllers <-> VIEWS ]]<--> EndUsers
+            
+            M-C Arch (employeed in rest-api)
+            Database <-->[ (Entities) <--> Repo --(model)--- Service --(model)- Controllers ]]<--> SPA <--> EndUsers
 
             Mulit-Layer Arch is governed by S.O.L.I.D Principles
 
@@ -760,6 +767,38 @@ Collections
                     Controllers handle only flow-control related logic
                     UI          hanle only user-Interaction logic like input and output
 
+                    tightly coupled
+                        class EmpDAO {
+                            public Employee getById(int empId){
+                                //jdbc code to retrive the data
+                                //if the record is not foudn, raise an exception
+                                //fill the data in emp obj
+                                return emp;
+                            }
+                        }
+
+                        class EmpDAOWithJPA {
+                            public Employee readById(int empId){
+                                //JPA code to retrive the data
+                                //if the record is not foudn, raise an exception
+                                //fill the data in emp obj
+                                return emp;
+                            }
+                        }
+
+                        class EmpService {
+                            //private EmpDAO empDao = new EmpDAO();
+                            private EmpDAOWithJPA empDao = new EmpDAOWithJPA();
+
+                            public Employee getById(int empId){
+                                //validate the empId
+                                //if not valid raise an exception
+
+                                //return empDao.getById(empId);
+                                return empDao.readById(empId);
+                            }
+                        }
+                    
                 O - Open / Clsoed Principle
                     A unit of code must be
                         Open for extension and
@@ -771,13 +810,14 @@ Collections
                     Employee
                         | <- Manager
                         
-                    Employee emp = new Manager(); 
+                    Employee emp = new Employee(); 
+                    Employee emp2 = new Manager(); 
 
                 I - Interface Seggrigation Principle
                     An interface msut not force non-implementable behaviours on its sub-types.
 
                     interface Shape {
-                        double gertArea();
+                        double getArea();
                         double getPerimeter();
                         double getVolume();
                     }
@@ -826,7 +866,8 @@ Collections
 
                     com.cts.hrapp.dao
                         interface EmployeeDAO {
-                            //offers abstract methods to add,delete,update and retrive employees                            
+                            //offers abstract methods to add,delete,update and retrive employees        
+                            Employee getById(int empId);                    
                         }
 
                         class EmployeeDAOImpl implement EmployeeDAO {
@@ -840,7 +881,7 @@ Collections
                         }
 
                     com.cts.hrapp.service
-                        interface EmployeeService {{
+                        interface EmployeeService {
 
                         }
 
@@ -855,6 +896,97 @@ Collections
                     Now when we create a new EmployeeDAOImpl2 with jpa-logic, as that
                     as well implements the EmployeeDAO interface, it has to manditoryly offer
                     methods with the exact smae signature. The Service class need not be modfied.
+
+    Multi-Threading & Java Memory Model
+    ----------------------------------------------------------------------------------
+
+        A Thread is a method that executes asynchronously.
+
+            Default all method calls are synchronous, meaning the method calls are eeecuted 
+            one after the other in the order of the invocation.
+
+                method1();
+                method2(); //this mehtod can not start execution until method1 is done .
+                method3(); //this mehtod can not start execution until method2 is done .
+                method1(); //this mehtod can not start execution until method3 is done .
+
+            If the methoda are wrpped in threads, and when the threads are started,
+            the execution of one thread will not wiat for the compeltion of its previosuly started thread.
+
+                //asynchronous
+                t1.start()
+                t2.start() //will start execution without waiting for t1
+                t3.start() //will start execution without waiting for t2
+
+        Asynchronous (Non-Blocking) execution or multi-threading ensure optimum utility of the CPU
+
+        For any procesws to execute, ite needs three memory block
+            Heap            is used to hold all the objects and variables at application level
+            Stack           is sued to hold all the objects and variables at the current method level
+            Meta-Space      CPU registers and program-Count (is the current line number thats being executed)
+
+        In multi-threading, each thread being a part of the same process,
+            Heap is shared among all the threads,
+            Stacka nd Meta-Space are exclusive to each thread.
+
+            this allows thread to share or work the smae data , prellelly.
+
+        java.lang.Runnable      public void run()
+        java.lang.Thread
+                    Thread()
+                    Thread(String name)
+                    Thread(Runnable runnable)
+                    Thread(Runnable runnable,String name)
+
+                    void start();
+                    String getName();
+                    void setName(String name);
+                    int getPriority();
+                    void stPriority(int);
+                    static void sleep(long);
+                    static Thread currentThread();
+
+        Note: Each and every java program is a thread by default. In other words, every java program
+            runs inside an implcit thread called 'main'.
+
+        Thread Life Cycle
+
+            Thread t  = new Thread();
+                |
+                ↓
+                t.start() -----→ [ WAITING / QUEUED ] --once resources and CPU are available ---→  [ RUNNING (run()) ]
+                                     ↑                                                                  |
+                                     |                                                                  |
+                                     |←------------[PAUSED ] ←-------------sleep(millsecs)--------------|
+                                                                           Object::wait                 | run() is done
+                                                                                                        ↓
+                                                                                                    [ TERMINATED ] 
+
+        Synchronization
+
+            is a machanisim where we ensure that only one thread is executed at a time on a resource.
+
+            At block/method level
+
+                mark the method with the keyword 'synchronized'
+
+                When a two or more threads call a synchronized method, the first calling method
+                will gain access and the method is locked for other threads until the first thread is done with the method.
+
+            At object level
+
+                synchronized(object) {
+                    //the code goes....
+                    //when a thred enters into this block, the entire object is locked
+                    //meaning all other threads will have to wiat to call any other method on this obejct
+                    //until the lock is released.
+                }
+
+            At class level
+
+                when synchronized keyword is applied to a static method of a class,
+                the entire class gets locked, when that static method is invoekd by a thread.
+
 
     JUnit
     ----------------------------------------------------------------------------------
