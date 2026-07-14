@@ -14,6 +14,8 @@ public interface ContactService {
 	void deleteById(int contactId) throws ResourceNotFoundException;
 
 	Contact getById(int contactId);
+	
+	Contact getByMobileNumber(String mobileNumber);
 
 	List<Contact> getAll();
 

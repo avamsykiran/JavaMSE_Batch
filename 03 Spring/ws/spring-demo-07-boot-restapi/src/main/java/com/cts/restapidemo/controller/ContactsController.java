@@ -35,7 +35,7 @@ public class ContactsController {
 		return ResponseEntity.ok(contactService.getAll());
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{id:[1-9][0-9]{0,4}}")
 	public ResponseEntity<Contact> getContactByIdAction(@PathVariable("id") int cid) throws ResourceNotFoundException {
 		Contact contact = contactService.getById(cid);
 		
@@ -43,6 +43,19 @@ public class ContactsController {
 			throw new ResourceNotFoundException("No Such Contact Found");
 		}
 		
+		//return new ResponseEntity<Contact>(contact,HttpStatus.OK);
+		return ResponseEntity.ok(contact);
+	}
+		
+	@GetMapping("/{mno:[1-9][0-9]{9}}")
+	public ResponseEntity<Contact> getContactByMobileNumberAction(@PathVariable("mno") String mobileNumber) throws ResourceNotFoundException {
+		Contact contact = contactService.getByMobileNumber(mobileNumber);
+		
+		if(contact==null) {
+			throw new ResourceNotFoundException("No Such Contact Found");
+		}
+		
+		//return new ResponseEntity<Contact>(contact,HttpStatus.OK);
 		return ResponseEntity.ok(contact);
 	}
 		

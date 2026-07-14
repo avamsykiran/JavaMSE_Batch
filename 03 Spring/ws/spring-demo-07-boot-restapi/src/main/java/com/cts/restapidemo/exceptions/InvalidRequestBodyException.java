@@ -6,7 +6,6 @@ import org.springframework.validation.ObjectError;
 @SuppressWarnings("serial")
 public class InvalidRequestBodyException extends Exception {
 	
-
 	public InvalidRequestBodyException(BindingResult bindingResult) {
 		super(
 				bindingResult

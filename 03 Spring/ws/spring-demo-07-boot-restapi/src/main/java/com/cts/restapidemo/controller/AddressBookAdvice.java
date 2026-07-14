@@ -15,7 +15,7 @@ import com.cts.restapidemo.models.ErrorMessage;
 public class AddressBookAdvice {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+		
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ErrorMessage> handleResourceNotFoundException(ResourceNotFoundException exp){
 		logger.error(exp.getMessage(), exp);

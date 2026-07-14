@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -26,6 +27,9 @@ import com.cts.restapidemo.repos.ContactRepo;
 		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, 
 		classes = SpringDemo06BootWebmvcApplication.class)
 @AutoConfigureMockMvc
+@AutoConfigureTestDatabase //create a in-mem h2 db, a h2 database dependency is required in pom.xml
+//@ActiveProfiles("test") incase we have a testing profile in the application.yml file
+@SuppressWarnings("null")
 public class ContactControllerIntegrationTest {
 
 	@Autowired
@@ -48,7 +52,7 @@ public class ContactControllerIntegrationTest {
 		repo.flush();	
 		testData=null;
 	}
-
+	
 	@Test
 	public void getContactsListAction_test() throws Exception {
 		mvc.perform(get("/contacts").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())

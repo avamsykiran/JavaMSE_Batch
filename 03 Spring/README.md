@@ -526,7 +526,7 @@ Spring Data
                         `findByAddressContaining(...)` is similar to `where address LIKE '%?%'` 
 
             `Like` / `NotLike` 
-                        String matching (requires you to pass the wildcard `%` in the parameter) 
+                        String matching (requires we to pass the wildcard `%` in the parameter) 
                         `findByZipCodeLike(String zipCode)` is similar to `where zipCode LIKE ?` 
 
             `IsNull` / `IsNotNull` 
@@ -560,7 +560,7 @@ Spring Data
         
         When to Use `@Query` (The Escape Hatch)
 
-            When the method name DSL becomes too cumbersome, unreadable, or you need to use database-specific features (e.g., joins, complex aggregations), use the `@Query` annotation. 
+            When the method name DSL becomes too cumbersome, unreadable, or we need to use database-specific features (e.g., joins, complex aggregations), use the `@Query` annotation. 
 
             public interface UserRepository extends JpaRepository<User, Long> {
                 // JPQL query
@@ -603,7 +603,6 @@ Spring Rest-api
 
         views       can JSP / JSF / Thymeleaf ...etc.,
 
-
     Single FronController REST Arch., (Spring Framework)
 
         repos <---models--> services <--models--> rest-controllers <--model--> FrontController <--REQ-- CLIENT
@@ -634,7 +633,7 @@ Spring Rest-api
     
     REST api standards
 
-        We will have to create only one URL per resource.
+        We will have to create only one URL(EndPoint) per resource.
 
             Resource        URL
             ------------------------------
@@ -655,7 +654,8 @@ Spring Rest-api
             --------------------------------------------------------------------------------------------     
                 GET         Retriving Records       200-OK          404-NOT_FOUND       500-Internal_Server_Err
                 POST        Creating Record         201-CREATED     400-BAD_REQUEST     500-Internal_Server_Err
-                PUT         Updating Record         202-ACCEPTED    400-BAD_REQUEST     500-Internal_Server_Err
+                PUT         Replacing Record        202-ACCEPTED    400-BAD_REQUEST     500-Internal_Server_Err
+                PATCH       Updating Record         202-ACCEPTED    400-BAD_REQUEST     500-Internal_Server_Err
                 DELETE      Deleting Record         204-NO_CONTENT  404-NOT_FOUND       500-Internal_Server_Err
 
             @RestController
@@ -687,7 +687,7 @@ Spring Rest-api
 
 Swagger UI
 ----------------------------------------------------------------------
-    Swagger UI is a powerful tool for visualizing and interacting with your Spring Boot REST API's documentation. The modern and recommended way to integrate this is by using the springdoc-openapi library.
+    Swagger UI is a powerful tool for visualizing and interacting with wer Spring Boot REST API's documentation. The modern and recommended way to integrate this is by using the springdoc-openapi library.
 
     <dependency>
         <groupId>org.springdoc</groupId>
@@ -739,7 +739,7 @@ Spring Boot Testing
     @TestConfiguration              is used to customize the config that injects
                                     only selected beans into the test class
 
-    @MockBean                       is used to create a mock implementd bean to assist unit testing.
+    @MockBean                       is used to create a mock implemented bean to assist unit testing.
 
     @WebMvcTest                     is an alternate for @AutoConfigureMockMvc in unit tests.
 
@@ -886,21 +886,21 @@ Spring Security - Token Based Authentication - Role Based Authorization
         http
             .authorizeHttpRequests(authorize -> authorize
                 // 1. Public assets and landing pages
-                .requestMatchers("/css/**", "/js/**", "/index.html", "/").permitAll()
+                .requestMatchers("/css/"", "/js/"", "/index.html", "/").permitAll()
                 
                 // 2. Anonymous-only endpoints (login/signup)
                 .requestMatchers("/login", "/register").anonymous()
                 
                 // 3. HTTP Method specific restrictions
-                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/products/**").hasAuthority("PRODUCT_WRITE")
+                .requestMatchers(HttpMethod.GET, "/api/products/"").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/products/"").hasAuthority("PRODUCT_WRITE")
                 
                 // 4. Role-based restrictions
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/management/**").hasAnyRole("ADMIN", "MANAGER")
+                .requestMatchers("/api/admin/"").hasRole("ADMIN")
+                .requestMatchers("/api/management/"").hasAnyRole("ADMIN", "MANAGER")
                 
                 // 5. High-security areas requiring fresh login (No remember-me)
-                .requestMatchers("/api/billing/**").fullyAuthenticated()
+                .requestMatchers("/api/billing/"").fullyAuthenticated()
                 
                 // 6. Absolute catch-all for anything else
                 .anyRequest().authenticated()
@@ -935,3 +935,129 @@ Spring Security - Token Based Authentication - Role Based Authorization
                 // Method runs and fetches the account from the database first
                 return accountRepository.findById(accountId); 
             }
+
+Aspect-Oriented Programming (AOP)
+-------------------------------------------------------------------------------------------------------
+    is a programming paradigm designed to increase modularity by allowing the separation of "cross-cutting concerns".
+
+    In plain English: every application has core business logic (like processing a payment or saving a user). But it also has secondary tasks that need to happen across multiple parts of the application—like logging, security checking, transaction management, and performance monitoring.
+
+    Without AOP, we end up duplicating this secondary code inside every single business method, violating the "DRY (Don't Repeat werself)" principle. AOP allows we to intercept wer code dynamically and apply these secondary tasks cleanly from the outside.
+
+    1. Core Terminology of AOP
+        Aspect:     The modularized cross-cutting concern. 
+                    It’s the class where we write our secondary logic (e.g., a `LoggingAspect` class). 
+
+        Join Point: A specific point during the execution of our program where an aspect *could* be plugged in.
+                    In Spring AOP, a Join Point is always a "method execution". 
+
+        Pointcut:   An expression that defines *which* Join Points should actually be intercepted. 
+                    we use pointcuts to target specific packages, classes, or method names. 
+
+        Advice:     The actual action taken by the Aspect at a specific Pointcut. 
+                    This is the code that runs (e.g., writing the log). 
+
+        Target Object:  The business component being advised (intercepted).
+
+        Weaving:    The process of linking aspects with other application types to create an advised object. 
+                    Spring AOP does this at "runtime" using dynamic proxies.
+
+    2. Types of Advice
+
+        Depending on *when* we want our code to execute relative to the business method, 
+        we choose one of these five advice types:
+
+        Advice Type         Description                                 Common Use Case 
+        --------------------------------------------------------------------------------------------
+        @Before             Runs *before* the target method executes.   Security checks, input validation. 
+        
+        @AfterReturning     Runs *after* the target method completes    Logging results, auditing.  
+                            successfully. 
+        
+        @AfterThrowing      Runs *after* the target method throws       Custom exception handling, alerting. 
+                            an exception.
+
+        @After              Runs *after* the method finishes,           Releasing resources, closing connections. |
+                            regardless of the outcome.
+
+        @Around             Wraps the target method completely.         Performance profiling, caching. 
+                            It can manage input, output, and choose 
+                            whether to execute the method at all.
+    
+    3. Implementing AOP in Spring Boot
+
+        Let’s implement a production-ready logging aspect that tracks how long business methods take to execute using Spring Boot.
+
+        Step 1: Add the Dependency
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+            </dependency>
+
+        Step 2: Create a Sample Business Service
+
+            @Service
+            public class GreetService {
+                public String greetUser(String userName) {
+                    // Simulating business logic processing time
+                    try { Thread.sleep(200); } catch (InterruptedException e) {}
+                    return "Hello " + userName;
+                }
+            }
+        
+         Step 3: Create the Aspect Class
+
+            Now, we build the Aspect. We use `@Around` advice because we need to capture the system time both *before* and *after* the method runs.
+
+            @Aspect
+            @Component
+            public class PerformanceLoggingAspect {
+
+                private static final Logger logger = LoggerFactory.getLogger(PerformanceLoggingAspect.class);
+
+                // Pointcut expression targets all methods in OrderService
+                @Pointcut("execution(* com.cts.aopdemo.service.GreetService.*(..))")
+                public void orderServiceMethods() {}
+
+                @Around("greetServiceMethods()")
+                public Object profileMethodExecution(ProceedingJoinPoint joinPoint) throws Throwable {
+                    long startTime = System.currentTimeMillis();
+                    
+                    String methodName = joinPoint.getSignature().getName();
+                    Object[] args = joinPoint.getArgs();
+                    logger.info("Entering method: {} with arguments: {}", methodName, Arrays.toString(args));
+
+                    Object result;
+                    try {
+                        // This line triggers the execution of the actual business method
+                        result = joinPoint.proceed(); 
+                    } catch (Throwable throwable) {
+                        logger.error("Exception thrown in method: {}", methodName, throwable);
+                        throw throwable; // Rethrow so normal flow isn't broken
+                    }
+
+                    long executionTime = System.currentTimeMillis() - startTime;
+                    logger.info("Exiting method: {}. Result: {}. Execution time: {} ms", methodName, result, executionTime);
+
+                    return result;
+                }
+            }
+        
+    Writing Pointcut Expressions
+
+        Pointcut designators dictate OUr targeting rules. The most common one is `execution()`, which follows this syntax pattern:
+
+        execution(modifiers-pattern?ret-type-pattern declaring-type-pattern? name-pattern? param-pattern? throws-pattern?
+
+        Common Pointcut Examples:
+            Target a specific method precisely:
+                `execution(public String com.cts.service.OrderService.placeOrder(String, double))`
+            Target any method starting with "get" in any class within a package:"
+                `execution(* com.cts.service.*.get*(..))`
+            Target all classes within a specific package (using `@within` or `within`):"
+                `within(com.cts.service..*)`
+            Target methods annotated with a custom annotation:"
+                `@annotation(com.cts.annotations.TrackTime)`
+        
+        

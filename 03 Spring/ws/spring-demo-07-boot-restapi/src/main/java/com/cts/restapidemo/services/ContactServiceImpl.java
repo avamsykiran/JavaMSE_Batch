@@ -16,8 +16,8 @@ public class ContactServiceImpl implements ContactService {
 	private ContactRepo contactRepo;
 	
 	@Override
-	public Contact add(Contact contact) {
-		return contactRepo.save(contact);
+	public Contact add(Contact contact) {		
+		return contact==null?null:contactRepo.save(contact);
 	}
 
 	@Override
@@ -38,11 +38,17 @@ public class ContactServiceImpl implements ContactService {
 		return contactRepo.findAll();		
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public Contact update(Contact contact) {
-		if(contactRepo.existsById(contact.getContactId())) {
+		if(contact!=null && contactRepo.existsById(contact.getContactId())) {
 			contact = contactRepo.save(contact);
 		}
 		return contact;
+	}
+
+	@Override
+	public Contact getByMobileNumber(String mobileNumber) {
+		return contactRepo.findByMobileNumber(mobileNumber).orElse(null);
 	}
 }
