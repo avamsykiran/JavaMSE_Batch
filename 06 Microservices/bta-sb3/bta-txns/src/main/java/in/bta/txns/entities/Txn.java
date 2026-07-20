@@ -2,17 +2,17 @@ package in.bta.txns.entities;
 
 import java.time.LocalDate;
 
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -27,19 +27,15 @@ public class Txn implements Comparable<Txn> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long txnId;
-	
 	@NotBlank(message = "header is a mandate field")
 	private String header;
-	
 	@NotNull(message = "txnDate is a mandate field")
 	@PastOrPresent(message = "txnDate can not be of future")
 	@DateTimeFormat(iso=ISO.DATE)
 	private LocalDate txnDate;
-	
 	@Enumerated
 	@NotNull(message = "type is a mandate field")
 	private TxnType type;
-	
 	@NotNull(message = "amount is a mandate field")
 	@Min(value = 0,message = "amount can not be negative")
 	private Double amount;
@@ -47,11 +43,6 @@ public class Txn implements Comparable<Txn> {
 	@ManyToOne
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private AccountHolder holder;
-
-	@Override
-	public int compareTo(Txn t) {
-		return txnId==null?1:txnId.compareTo(t.txnId);
-	}
 	
 	public Txn() {
 		// TODO Auto-generated constructor stub
@@ -119,5 +110,10 @@ public class Txn implements Comparable<Txn> {
 		this.holder = holder;
 	}
 
-		
+	@Override
+	public int compareTo(Txn t) {
+		return txnId==null?1:txnId.compareTo(t.txnId);
+	}
+	
+	
 }
