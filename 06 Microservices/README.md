@@ -812,3 +812,123 @@ OAuth2.0 tailoring on Spring Boot Microservices
         Option B: Client Credentials Grant (System-to-System)
 
             If the interaction is a pure backend background task completely unrelated to the active user, configure the microservice as an OAuth2 Client using the `client_credentials` grant type. It will fetch an independent system token directly from the Authorization Server to communicate with other resource servers.
+
+CQRS 
+----------------------------------------------------------------------------------------------------
+
+    Command Query Responsibility Segregation (CQRS) is an architectural pattern that separates  
+        (1) the operations responsible for modifying data (Commands) and
+        (2) the operations responsible for reading data (Queries). 
+    
+    This separation allows for independent optimization, scaling, and maintenance of the read and write concerns.
+
+    In a Spring Boot microservices architecture, CQRS is often implemented by creating two separate services or microservices:
+
+    1.  Command Microservice (Write Side):
+
+        * Handles all data-modifying operations (Create, Update, Delete).
+        * Uses a simple, write-optimized data model and database (e.g., relational with normalization, or an event store).
+        * Publishes events (e.g., using Apache Kafka ) after successfully executing a command to notify the query side of the change.
+        * Example: `OrderCommandService` handles `createOrder`, `updateOrder`, and `cancelOrder`.
+
+    2.  Query Microservice (Read Side):
+
+        * Handles all data-retrieval operations.
+        * Subscribes to the events published by the Command side.
+        * Updates its own, read-optimized data store (the "read model" or "projection") based on these events. This store is often denormalized for fast queries 
+            (e.g., Elasticsearch or a different relational/NoSQL database).
+        * Exposes a set of REST endpoints for fast read access.
+        * Example: `OrderQueryService` subscribes to `OrderCreatedEvent` and updates its view, then exposes a `searchOrders` endpoint.
+
+    This separation is often complemented by Event Sourcing, where every change to the application state is captured as a sequence of immutable events.
+
+    Example:
+        1. Command Microservice (Write Side)
+
+            This service handles the business logic and state change, then publishes an event.
+
+            // --- Command DTO ---
+            public class CreateOrderCommand {
+                private String productId;
+                private int quantity;
+                // Getters and Setters
+            }
+
+            // --- Command Handler (Service) ---
+            @Service
+            public class OrderCommandService {
+
+                @Autowired
+                private OrderRepository orderRepository; // JPA Repository for write DB
+                
+                @Autowired
+                private KafkaTemplate<String, Object> kafkaTemplate;
+
+                public Long handle(CreateOrderCommand command) {
+                    // 1. Business Logic / Validation
+                    if (command.getQuantity() <= 0) {
+                        throw new IllegalArgumentException("Quantity must be positive.");
+                    }
+                    
+                    // 2. Save/Update State in the Write DB
+                    Order order = new Order(command.getProductId(), command.getQuantity(), "CREATED");
+                    order = orderRepository.save(order);
+                    
+                    // 3. Publish an Event
+                    OrderCreatedEvent event = new OrderCreatedEvent(order.getId(), order.getProductId(), order.getQuantity());
+                    kafkaTemplate.send("order-events-topic", order.getId().toString(), event);
+                    
+                    return order.getId();
+                }
+            }
+        
+        2. Query Microservice (Read Side)
+
+            This service listens for events and updates its read-optimized data store. It then exposes the read endpoints.
+
+            // --- Read Model DTO ---
+            public class OrderSummaryDTO {
+                private Long orderId;
+                private String productId;
+                private int quantity;
+                private String status;
+                // Getters and Setters
+            }
+
+            // --- Event Listener/Projector ---
+            @Service
+            public class OrderEventConsumer {
+
+                @Autowired
+                private OrderSummaryRepository orderSummaryRepository; // Repository for read-optimized DB
+
+                // Kafka Listener to consume events
+                @KafkaListener(topics = "order-events-topic", groupId = "query-group")
+                public void consume(OrderCreatedEvent event) {
+                    System.out.println("Received OrderCreatedEvent for ID: " + event.getOrderId());
+                    
+                    // 1. Update the Read Model (Denormalized view)
+                    OrderSummaryDTO summary = new OrderSummaryDTO();
+                    summary.setOrderId(event.getOrderId());
+                    summary.setProductId(event.getProductId());
+                    summary.setQuantity(event.getQuantity());
+                    summary.setStatus("CREATED");
+                    
+                    orderSummaryRepository.save(summary);
+                }
+            }
+
+            // --- Query Endpoint (Controller) ---
+            @RestController
+            @RequestMapping("/orders")
+            public class OrderQueryController {
+
+                @Autowired
+                private OrderSummaryRepository orderSummaryRepository;
+
+                @GetMapping("/{orderId}")
+                public OrderSummaryDTO getOrderSummary(@PathVariable Long orderId) {
+                    return orderSummaryRepository.findById(orderId)
+                            .orElseThrow(() -> new RuntimeException("Order not found in read model"));
+                }
+            }

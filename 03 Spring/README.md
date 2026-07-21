@@ -766,7 +766,7 @@ Case Study
                 txnId               : Long
                 header              : String
                 amount              : Double
-                type                : TxnType   (enum of CREDIT/ DEBIT)
+                type                : TxnType   (enum having CREDIT/ DEBIT)
                 project             : Project
 
             Resource        Table           endpoint
@@ -1048,7 +1048,7 @@ Aspect-Oriented Programming (AOP)
 
         Pointcut designators dictate OUr targeting rules. The most common one is `execution()`, which follows this syntax pattern:
 
-        execution(modifiers-pattern?ret-type-pattern declaring-type-pattern? name-pattern? param-pattern? throws-pattern?
+        execution(modifiers-pattern? return-type-pattern? name-pattern? param-pattern? throws-pattern?
 
         Common Pointcut Examples:
             Target a specific method precisely:
