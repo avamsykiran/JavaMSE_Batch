@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <title>Layout </title>
+    <style>
+        /* 1. Base Styles & Box Sizing */
+
+         body {
+           font-size: 16px; /* Base size */
+        }
+
+        * {
+            box-sizing: border-box; /* Ensures padding doesn't break our width % */
+        }
+
+        .column {
+            background-color: #3498db;
+            color: white;
+            padding: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+            /* By default, blocks are 100% width, so mobile is handled! */
+        }
+
+        /* 2. The Clearfix Hack */
+        /* This forces the .row to contain its floated children */
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* 3. Responsive Grid (Desktop: 768px and up) */
+        @media (min-width: 768px) {
+            .column {
+                float: left;        /* Move blocks side-by-side */
+                width: 33.33%;      /* 3 equal columns */
+                margin-bottom: 0;   /* Remove mobile spacing */
+                border: 1px solid #fff;
+            }
+            body {
+                font-size: 18px; /* Slightly larger text for desktop */
+            }
+        }      
+            
+    </style>
+
+</head>
+
+<body>
+    <div class="row clearfix">
+    <div class="column">Column 1</div>
+    <div class="column">Column 2</div>
+    <div class="column">Column 3</div>
+</div>
+</body>
+
+</html>

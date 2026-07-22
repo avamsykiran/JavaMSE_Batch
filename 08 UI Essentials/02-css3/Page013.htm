@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <title>Layout </title>
+    <style>
+        /* 1. Base Styles & Mobile First */
+        * {
+            box-sizing: border-box;
+        }
+
+        .flex-item {
+            background-color: #2ecc71; /* Green for Flex! */
+            color: white;
+            padding: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* The Flex Layout (Desktop: 768px and up) */
+        @media (min-width: 768px) {
+            .flex-container {
+                display: flex;         /* The "Magic" switch */
+                gap: 15px;             /* Built-in spacing! No more margin hacks */
+            }
+
+            .flex-item {
+                flex: 1;               /* Tells each item to grow equally to fill space */
+                margin-bottom: 0;      /* Remove the mobile margin */
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <div class="flex-container">
+        <div class="flex-item">Column 1</div>
+        <div class="flex-item">Column 2</div>
+        <div class="flex-item">Column 3</div>    
+    </div>
+</body>
+
+</html>
