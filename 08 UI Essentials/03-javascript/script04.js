@@ -1,9 +1,9 @@
 
 console.log(typeof 34);
 console.log(typeof 34.56);
-console.log(typeof "Hello"); //dbl-quotes
-console.log(typeof 'Hello'); //single-quotes
-console.log(typeof `Hello`); //back-quotes
+console.log(typeof "Hello"); //dbl-quotes       "   "
+console.log(typeof 'Hello'); //single-quotes    '   '
+console.log(typeof `Hello`); //back-quotes      `   `
 console.log(typeof true);
 console.log(typeof null);
 console.log(typeof undefined);

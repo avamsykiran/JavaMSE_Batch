@@ -151,7 +151,7 @@ HTML - Hyper Text Mark Up Language
             maxlength       attribute that takes a maximum length of the value while type="text"
             pattern         attribute that takes a reglar expression to validate the value while type="text"
 
-        textarea            used to accpet multi line text
+        textarea            used to accept multi line text
         
         select              used to create a drop-down or a list box
             multiple        attribute makes the drop-down into a list enabling multiple option selection
@@ -310,7 +310,11 @@ CSS 3
                     }
 
             5. Psuedo
-             
+                are built-in selectors for selecting elements dynamically like
+                all input elements that has validation error
+                or all first-child eles of a container 
+                or all last-child eles of a container ...etc.,.
+                they start with  ::             
 
     CSS - unit of measure
     ------------------------------------
@@ -621,13 +625,34 @@ JavaScript (ES6)
             we need a javascript runtime to execute the script
             without a browser. And NodeJS is one such runtime.
 
-            1. javascript inherits it syntx from c and cpp,hence case sensitive
+            There are dozens of JavaScript runtimes, but three major engines dominate the ecosystem, supplemented by specialized modern runtimes.
+            
+                The Big Three (Dominant Runtimes)
+                    Node.js:  The most widely used backend runtime. Built on Google's V8 engine.
+                    Deno:     A secure-by-default runtime created by Node's original developer. Uses V8 and Rust.
+                    Bun:      A high-performance, all-in-one runtime. Built on Apple's WebKit JavaScriptCore engine.
+                
+                Major Browser Runtimes
+                    V8: Powers Google Chrome, Microsoft Edge, and Opera.
+                    SpiderMonkey: Powers Mozilla Firefox and is the oldest JavaScript engine.
+                    JavaScriptCore (JSC): Powers Apple Safari and mobile browsers on iOS.
+                
+                Specialized & EdgeRuntimes
+                    Cloudflare Workerd: Designed for serverless edge computing.
+                    WinterJS: An ultra-fast, SpiderMonkey-powered runtime for edge servers.
+                    QuickJS: A lightweight, embeddable runtime for small devices.
+                    Hermes: An engine optimized by Meta specifically for React Native apps.
+
+            1. javascript inherits it syntax from c and cpp,hence case sensitive
             2. is a dynamically typed language
                 a. variables need not be declared
                 b. even if we declare using var/let/const keywords, we dont specfiy the datatype
                 c. the type of a variable is decided after it is assigned a value
-                d. a variable can hold data of different types.                
-                        number,strings,null,array,function,undefined
+                d. a variable can hold data of different types.         
+                    primitive data types       
+                        number,strings,null,array,function,undefined, object
+                    user defined data types
+                        classes
 
         Datatypes
         Variables and scopes (let,var), operators
@@ -824,6 +849,10 @@ NodeJS
             is used to install a third party package globally on our machine.
             '<userFolder>/node_modules' will contain the downloaded files.
 
+        npm i
+            is going to reinstall all the packages listed as dependencies
+            in the package.json
+        
         npm uninstall package-name
         
         npm test                executes the 'test' script
@@ -833,7 +862,7 @@ NodeJS
 
     Javascript Modules
 
-        whiule in native-javascript, we had no modularizaton.
+        while in native-javascript, we had no modularizaton.
 
         RequireJS and CommonJs were two different standards introduced by third-party players
         for modularization.
@@ -845,11 +874,33 @@ NodeJS
         Each artifact of a Javascript module is private to that module.
 
         'export' keyword is used to allow access to the artifacts of a module outside the module.
-
+            
         'import' keyword is used to bring the artifacts from one module to another.
 
-        'export default' is used to provide a default artifact of a module. 
-        And a module can have only one such artifact. Default artifacts can be imported with out {}.
+        'export default' is used to provide a default artifact of a module. And a module can have only one such artifact. Default artifacts can be imported with out {}.
+
+            empService.js
+                class Employee{
+                    //constructors ...etc.,
+                }
+
+                export function validate(emp){
+                    //validation logic
+                }
+                
+                export function print(emp){
+                    //print logic
+                }
+
+                export default Employee;
+            
+            main.js
+                import {validate,print},Employee fomr './empService.js'                
+
+                var emp = new Employee();
+                validate(emp);
+                print(emp);
+
 
 Typescript
 
@@ -864,7 +915,7 @@ Typescript
 
     Transpelling ( Compiling ) 
 
-        npx tsc filename.ts 
+        npx tsc 
 
     Datatypes
 
@@ -906,7 +957,7 @@ Typescript
                             }
                         }
 
-        undefined           the "salary" proeprty on a Consumer object is undefiend.
+        undefined           the "salary" property on a Consumer object is undefiend.
         null                the "referalBenifit" property on a Consumer object can be null.
 
     User Defined Data Types
@@ -986,7 +1037,7 @@ Typescript
         enums      
             is a set of possible values of a field.
 
-            gender  can be eitehr Male or Female
+            gender  can be either Male or Female
             
             enum Gender {
                 MALE, FEMALE
@@ -1031,6 +1082,11 @@ Typescript
         const funName = function(param1:type,param2:type) : returntype {
 
         }
+
+        const funName = (param1:type,param2:type) : returntype => {
+
+        }
+
 
     '!' and '?' operator
         

@@ -11,4 +11,3 @@ ChildVaccinationTracker
     6. Generate a report of vaccine given to a child given child Id.
     7. Generate a report listing all the children who are adminisered a specific vaccine.
 
-    

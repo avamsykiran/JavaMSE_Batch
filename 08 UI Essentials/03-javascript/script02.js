@@ -12,8 +12,8 @@ console.log(n1%n2);
 
 console.log(n1==n2);
 console.log(n1==n3);
-console.log(n1===n2);
-console.log(n1===n3);
+console.log(n1===n2); // console.log(typeof(n1)==typeof(n2) && n1==n2);
+console.log(n1===n3); // console.log(typeof(n1)==typeof(n3) && n1==n3);
 console.log(n1<n2);
 console.log(n1>n2);
 console.log(n1<=n2);

@@ -1,3 +1,8 @@
+/*
+function sum(a,b){
+    return a+b;
+}
+*/
 
 function myFunction(){
     a = 45; //hoisting
