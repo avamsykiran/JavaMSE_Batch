@@ -39,3 +39,15 @@ Assignment-5: TypeScript
     Add a module 'main.ts', import the classes from models.ts
         create an object for each of those classes and print.
 
+Assignment-6: ReactJS Basics
+    Develop a ReactJS SPA having the below components    
+
+    (a) EMICaliculator Component (class-component)
+        (i) Using a form, user is expected to input
+            Loan Amount, No Of EMIs and Sanction Date
+        (ii) Compute and disp;ay the EMI.
+        (iv) the computed emi msut be recomputed on changing any of the 3 inputs
+
+    (b) Today Component (function Component)
+        this component shall display the current date on the top-right corner of the page
+        above the Header component.
