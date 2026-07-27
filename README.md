@@ -44,8 +44,8 @@ Assignment-6: ReactJS Basics
 
     (a) EMICaliculator Component (class-component)
         (i) Using a form, user is expected to input
-            Loan Amount, No Of EMIs and Sanction Date
-        (ii) Compute and disp;ay the EMI.
+            Loan Amount, No Of EMIs and ROI
+        (ii) Compute and display the EMI.
         (iv) the computed emi msut be recomputed on changing any of the 3 inputs
 
     (b) Today Component (function Component)
