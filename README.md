@@ -50,4 +50,5 @@ Assignment-6: ReactJS Basics
 
     (b) Today Component (function Component)
         this component shall display the current date on the top-right corner of the page
-        above the Header component.
+        above the Header component, that shall accept a date-format as an attribute from 
+        its parent component, and display the date as per the given format.
