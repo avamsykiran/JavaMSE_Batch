@@ -9,13 +9,15 @@ import PathNotFound from "./components/PathNotFound";
 function App() {
   return (
     <BrowserRouter>
-      <Header />
+      <Header appTitle="Address Book" />
       <Container fluid className="m-4 p-4 mx-auto">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/list" element={<ContactsList />} />
           <Route path="/new" element={<ContactForm />} />
           <Route path="/edit/:id" element={<ContactForm />} />      
+
+          {/* '*' indicates a path that is not mapped. */}
           <Route path="*" element={<PathNotFound />} />          
         </Routes>
       </Container>
