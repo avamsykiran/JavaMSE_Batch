@@ -3,5 +3,5 @@ export interface Contact{
     fullName:string;
     mobileNumber:string;
     mailId:string;
-    dateOfBith:string;
+    dateOfBirth:string;
 }

@@ -587,7 +587,7 @@ ReactJS
             <!-- is common area, uncontrolled by router -->
             
             <Routes>
-                <!-- is the route area, controlled by router -->
+                <!--the is route area, controlled by router -->
                 <Route path="path1" element={<Component1 /> } />
                 <Route path="path2" element={<Component2 /> } />
                 <Route path="path3" element={<Component3 /> } />
@@ -617,11 +617,11 @@ ReactJS
                 3. Local state remains accessable only tot hat component.
 
             Global or Application Level State Management
-                1. the stte maintaiend globally at the application level
+                1. the state maintaiend globally at the application level
                 2. data in the global state is accessable to all the compo's in the app
                 3. reactjs offers 'context-api' (is highly costly as it triggers deep-rendering for each change in the data)
                 4. Redux - a thrid party library - offers global state management
-                5. RTK (Redux Tool Kit) - is a refiend version of Redux.
+                5. RTK (Redux Tool Kit) - is a refined version of Redux.
                     RTK is far easy to work with from the developer's point compared to workiong with Redux directly.
 
             Server-Side State Management

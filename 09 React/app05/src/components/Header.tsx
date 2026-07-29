@@ -24,7 +24,9 @@ function Header({ appTitle }: { appTitle: string }) {
                     <Nav className="me-auto">
                         {
                             links.map(lx => (
-                                <NavLink href={lx.path} className={pathname === lx.path ? "active":""}>
+                                <NavLink 
+                                    key={lx.path}
+                                    href={lx.path} className={pathname === lx.path ? "active":""}>
                                     {lx.text}
                                 </NavLink>
                             ))
