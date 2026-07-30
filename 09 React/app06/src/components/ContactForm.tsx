@@ -6,9 +6,9 @@ import type { Contact } from "../lib/models/Contact";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
-import { selectContactById, selectContactsCount } from "../lib/state/selectors";
+import { selectContactById } from "../lib/state/selectors";
 import type { AppDispatch, RootState } from "../lib/state/appStore";
-import { addContact, updateContact } from "../lib/state/contactsSlice";
+import { addContact, incrementNextId, updateContact } from "../lib/state/contactsSlice";
 
 function ContactForm() {
 
@@ -50,7 +50,7 @@ function ContactForm() {
     const { id } = useParams();
 
     const oldContact:Contact = useSelector((state:RootState) => selectContactById(state,Number(id)));
-    const count:number = useSelector(selectContactsCount);
+    const nextId:number = useSelector((state:RootState) =>state.contacts.nextId);
     const dispatch:AppDispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -67,7 +67,8 @@ function ContactForm() {
 
     const save = (c:Contact) => {
         if(isNew){
-            dispatch(addContact({...c,contactId:count+1}))
+            dispatch(addContact({...c,contactId:nextId}))
+            dispatch(incrementNextId())
         }else{
             dispatch(updateContact({changes:c,id:c.contactId}) )
         }

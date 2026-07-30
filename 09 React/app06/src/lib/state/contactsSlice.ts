@@ -1,4 +1,4 @@
-import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Contact } from "../models/Contact";
 
 export const contactsEntityAdapter = createEntityAdapter<Contact>({
@@ -7,7 +7,9 @@ export const contactsEntityAdapter = createEntityAdapter<Contact>({
 
 const contactsSlice = createSlice({
     name: "contactsSlice",
-    initialState: contactsEntityAdapter.getInitialState({},[
+    initialState: contactsEntityAdapter.getInitialState({
+        nextId:5
+    },[
         { contactId: 1, fullName: "Vamsy", mobileNumber: "9999999991", mailId: "v@g.com", dateOfBirth: "1985-06-11" },
         { contactId: 2, fullName: "Murthy", mobileNumber: "9999999992", mailId: "m@g.com", dateOfBirth: "1985-06-12" },
         { contactId: 3, fullName: "Suresh", mobileNumber: "9999999993", mailId: "s@g.com", dateOfBirth: "1985-06-13" },
@@ -16,10 +18,13 @@ const contactsSlice = createSlice({
     reducers:{
         addContact: contactsEntityAdapter.addOne,
         updateContact: contactsEntityAdapter.updateOne,
-        deleteContact: contactsEntityAdapter.removeOne
+        deleteContact: contactsEntityAdapter.removeOne,
+        incrementNextId: (state,_action:PayloadAction<void>) => {
+            state.nextId+=1;
+        }
     }
 });
 
 export const contactsReducer = contactsSlice.reducer;
 
-export const { addContact,updateContact,deleteContact } = contactsSlice.actions;
+export const { addContact,updateContact,deleteContact,incrementNextId } = contactsSlice.actions;
