@@ -629,6 +629,24 @@ ReactJS
                 2. the first option is rest-api
                 3. the second option Query Language Tools like GraphQL / TanStack Query ...etc.,
 
+    Context API
+    ----------------------------------------------------------
+
+        React Context API is a built-in state management feature introduced to solve one core problem: prop drilling.
+
+        It allows you to share state globally across your component tree without explicitly passing props down through every single level of intermediate components.
+
+        Anatomy of the Context API
+            The Context system relies on three core concepts:
+
+            createContext(): Creates the Context object containing a default value.
+
+            Provider: A wrapper component that supplies the state to its children.
+
+            useContext(): A React Hook used by child components to read and consume the state.
+
+        
+
     Global State Management using Redux ToolKit
     -----------------------------------------------------------
 
@@ -686,7 +704,6 @@ ReactJS
                                     //each function has to accept currentState and action
                                     //and return modifiedState
                                 },
-
                             });
 
                             once slice is created, actions are also auto-created (one action for each reducer).
@@ -777,7 +794,7 @@ ReactJS
                         },
                     });
 
-                    export const { bookAdded, booksReceived, bookUpdated, bookRemoved } = booksSlice.actions;
+                    export const { bookAdded, bookUpdated, bookRemoved } = booksSlice.actions;
                     export default booksSlice.reducer;
 
                 3. The Auto-Generated Selectors
