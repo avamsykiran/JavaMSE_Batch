@@ -52,3 +52,9 @@ Assignment-6: ReactJS Basics
         this component shall display the current date on the top-right corner of the page
         above the Header component, that shall accept a date-format as an attribute from 
         its parent component, and display the date as per the given format.
+
+Assignment-7: ReactJS react-router, useForm Hook, YUP,  and Global State Managemetn using RTK
+    Develop a ReactJS SPA the does CRUD operations on a AccountHolder entity.
+    The AccountHolder has ahId, fullName, mailId, mobileNumber and currentBalance as fields.
+    Use Redux Tool Kir Entity Manager for global state management.
+    Use react-bootstrap for styling.

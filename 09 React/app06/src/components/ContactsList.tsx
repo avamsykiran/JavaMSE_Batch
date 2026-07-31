@@ -2,9 +2,9 @@ import { Alert, Button, Card, CardBody, CardFooter, CardHeader, Table } from "re
 import type { Contact } from "../lib/models/Contact";
 import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAllContacts, selectContactsCount } from "../lib/state/selectors";
-import type { AppDispatch } from "../lib/state/appStore";
-import { deleteContact } from "../lib/state/contactsSlice";
+import { selectAllContacts, selectContactsCount } from "../lib/reduxState/selectors";
+import type { AppDispatch } from "../lib/reduxState/appStore";
+import { deleteContact } from "../lib/reduxState/contactsSlice";
 
 function ContactsList() {
 

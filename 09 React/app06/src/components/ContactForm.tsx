@@ -6,9 +6,9 @@ import type { Contact } from "../lib/models/Contact";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
-import { selectContactById } from "../lib/state/selectors";
-import type { AppDispatch, RootState } from "../lib/state/appStore";
-import { addContact, incrementNextId, updateContact } from "../lib/state/contactsSlice";
+import { selectContactById } from "../lib/reduxState/selectors";
+import type { AppDispatch, RootState } from "../lib/reduxState/appStore";
+import { addContact, incrementNextId, updateContact } from "../lib/reduxState/contactsSlice";
 
 function ContactForm() {
 

@@ -641,15 +641,12 @@ ReactJS
 
             createContext(): Creates the Context object containing a default value.
 
-            Provider: A wrapper component that supplies the state to its children.
+            Provider: A wrapper high-order component that supplies the state to its children.
 
-            useContext(): A React Hook used by child components to read and consume the state.
-
-        
+            useContext(): A React Hook used by child components to read and consume the state.       
 
     Global State Management using Redux ToolKit
     -----------------------------------------------------------
-
         Redux
             is an independent library used to maintain state globally and is 
             used by a varity of frameworks like Angular, React ...etc.,

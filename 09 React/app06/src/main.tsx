@@ -6,13 +6,16 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 
 import './index.css'
 import App from './App.tsx'
-import { Provider } from 'react-redux'
-import { appStore } from './lib/state/appStore.ts'
+import { Provider as ReduxProvider } from 'react-redux'
+import { appStore } from './lib/reduxState/appStore.ts'
+import ThemeProvider from './lib/context/ThemeProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Provider store={appStore}>
-      <App />
-    </Provider>
+    <ReduxProvider store={appStore}>
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
+    </ReduxProvider>
   </StrictMode>,
 )
