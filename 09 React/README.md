@@ -900,7 +900,7 @@ ReactJS
         
         Every async method returns a promise object that allows to handle the return value or error.
 
-        const method1 = () => MAth.PI
+        const method1 = () => Math.PI
         const method2 = (a,b) => a+b
 
         x = method1()
@@ -984,7 +984,7 @@ ReactJS
                 }
             */
 
-            interface UsersSliceExtaState{
+            interface UsersSliceExtraState{
                 status:'idle' | 'loading' | 'succeeded' | 'failed';
                 error:string|null;
             } 
@@ -1027,18 +1027,6 @@ ReactJS
             });
 
             export default usersSlice.reducer;
-
-    Create-fake-rest-api using Json-Server
-    ------------------------------------------------
-
-        md adb-api
-        cd adb-api
-        npm init -y
-        npm i json-server@0.17.4
-
-        create a json file 'adb-api/data.json' that contians the hypothetical data
-
-        create script "start":"json-server --port 9999 --watch ./data.json" in package.json
 
     Memorizaion
     ------------------------------------------------
