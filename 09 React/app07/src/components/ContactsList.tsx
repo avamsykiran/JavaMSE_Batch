@@ -3,19 +3,42 @@ import type { Contact } from "../lib/models/Contact";
 import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllContacts, selectContactsCount } from "../lib/reduxState/selectors";
-import type { AppDispatch } from "../lib/reduxState/appStore";
-import { deleteContact } from "../lib/reduxState/contactsSlice";
+import type { AppDispatch, RootState } from "../lib/reduxState/appStore";
+import { deleteContact, getAllContacts } from "../lib/reduxState/contactsThunks";
+import { useEffect } from "react";
 
 function ContactsList() {
 
-    const list:Contact[] = useSelector(selectAllContacts);
-    const count:number = useSelector(selectContactsCount);
-    const dispatch:AppDispatch = useDispatch();
+    const list: Contact[] = useSelector(selectAllContacts);
+    const count: number = useSelector(selectContactsCount);
+    const apiStatus = useSelector((state: RootState) => state.contacts.status);
+    const errMsg = useSelector((state: RootState) => state.contacts.errMsg);
+
+    const dispatch: AppDispatch = useDispatch();
+
+    useEffect(() => { dispatch(getAllContacts()) }, []);
 
     return (
         <Card>
             <CardHeader>Contacts List</CardHeader>
             <CardBody>
+
+                {
+                    apiStatus === "pending" && (
+                        <Alert variant="info" className="m-2 p-2">
+                            <strong>Please wait while processing your request..! </strong>
+                        </Alert>
+                    )
+                }
+
+                {
+                    errMsg && (
+                        <Alert variant="danger" className="m-2 p-2">
+                            <strong>{errMsg} </strong>
+                        </Alert>
+                    )
+                }
+
                 {
                     list && list.length > 0 ? (
                         <Table striped hover bordered>
@@ -41,7 +64,7 @@ function ContactsList() {
                                                 <i className="bi-pen" /> EDIT
                                             </Link>
                                             <Button variant="danger" size="sm"
-                                                onClick={_e => dispatch(deleteContact(cx.contactId)) }>
+                                                onClick={_e => dispatch(deleteContact(cx.contactId))}>
                                                 <i className="bi-trash" /> DELETE
                                             </Button>
                                         </td>

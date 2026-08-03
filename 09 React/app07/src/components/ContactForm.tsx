@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Card, CardBody, CardFooter, CardHeader, Col, Form, FormControl, FormGroup, FormLabel, FormText, Row } from "react-bootstrap";
+import { Alert, Button, Card, CardBody, CardFooter, CardHeader, Col, Form, FormControl, FormGroup, FormLabel, FormText, Row } from "react-bootstrap";
 import { useLocation, useNavigate, useParams } from "react-router";
 import * as yup from "yup";
 import type { Contact } from "../lib/models/Contact";
@@ -8,13 +8,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
 import { selectContactById } from "../lib/reduxState/selectors";
 import type { AppDispatch, RootState } from "../lib/reduxState/appStore";
-import { addContact, incrementNextId, updateContact } from "../lib/reduxState/contactsSlice";
+import { addContact, updateContact } from "../lib/reduxState/contactsThunks";
 
 function ContactForm() {
 
     const contactSchema: yup.ObjectSchema<Contact> = yup.object({
-        contactId: yup.number()
-            .required('Conmtact Id is a mandatory field'),
+        contactId: yup.number().optional(),
         fullName: yup.string()
             .required('Full Name is a mandatory field')
             .min(5, "Expecting a minimum length of 5 chars")
@@ -49,34 +48,51 @@ function ContactForm() {
     const { pathname } = useLocation();
     const { id } = useParams();
 
-    const oldContact:Contact = useSelector((state:RootState) => selectContactById(state,Number(id)));
-    const nextId:number = useSelector((state:RootState) =>state.contacts.nextId);
-    const dispatch:AppDispatch = useDispatch();
+    const oldContact: Contact = useSelector((state: RootState) => selectContactById(state, Number(id)));
+    const apiStatus = useSelector((state: RootState) => state.contacts.status);
+    const errMsg = useSelector((state: RootState) => state.contacts.errMsg);
+    const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
 
     const [isNew, setNew] = useState<boolean>(true);
 
     useEffect(() => {
         if (pathname.startsWith("/edit") && id && oldContact) {
-            setNew(false);    
+            setNew(false);
             reset(oldContact);
         } else {
             setNew(true);
         }
-    }, [pathname,id,oldContact])
+    }, [pathname, id, oldContact])
 
-    const save = (c:Contact) => {
-        if(isNew){
-            dispatch(addContact({...c,contactId:nextId}))
-            dispatch(incrementNextId())
-        }else{
-            dispatch(updateContact({changes:c,id:c.contactId}) )
+    const save = (c: Contact) => {
+        if (isNew) {
+            dispatch(addContact({ ...c,contactId:undefined }));
+        } else {
+            dispatch(updateContact({ ...c }));
         }
         navigate("/list");
     }
 
     return (
         <Col sm={5} xs className="mx-auto">
+
+            {
+                apiStatus === "pending" && (
+                    <Alert variant="info" className="m-2 p-2">
+                        <strong>Please wait while processing your request..! </strong>
+                    </Alert>
+                )
+            }
+
+            {
+                errMsg && (
+                    <Alert variant="danger" className="m-2 p-2">
+                        <strong>{errMsg} </strong>
+                    </Alert>
+                )
+            }
+
             <Form onSubmit={handleSubmit(save)}>
                 <Card bg="info">
                     <CardHeader>
@@ -86,52 +102,52 @@ function ContactForm() {
                         <FormGroup className="mb-2" controlId="cid">
                             <FormLabel>Contact Id</FormLabel>
                             <FormControl type="number" readOnly {...register("contactId")} />
-                            { errors.contactId && (
+                            {errors.contactId && (
                                 <FormText className="text-danger">
                                     {errors.contactId.message}
                                 </FormText>
-                            ) }
+                            )}
                         </FormGroup>
                         <FormGroup className="mb-2" controlId="fnm">
                             <FormLabel>Full Name</FormLabel>
                             <FormControl type="text" {...register("fullName")} />
-                            { errors.fullName && (
+                            {errors.fullName && (
                                 <FormText className="text-danger">
                                     {errors.fullName.message}
                                 </FormText>
-                            ) }
+                            )}
                         </FormGroup>
                         <FormGroup className="mb-2" controlId="mno">
                             <FormLabel>Mobile Number</FormLabel>
                             <FormControl type="number" {...register("mobileNumber")} />
-                            { errors.mobileNumber && (
+                            {errors.mobileNumber && (
                                 <FormText className="text-danger">
                                     {errors.mobileNumber.message}
                                 </FormText>
-                            ) }
+                            )}
                         </FormGroup>
                         <FormGroup className="mb-2" controlId="mid">
                             <FormLabel>Mail Id</FormLabel>
                             <FormControl type="email" {...register("mailId")} />
-                            { errors.mailId && (
+                            {errors.mailId && (
                                 <FormText className="text-danger">
                                     {errors.mailId.message}
                                 </FormText>
-                            ) }
+                            )}
                         </FormGroup>
                         <FormGroup className="mb-2" controlId="dob">
                             <FormLabel>Date of Birth</FormLabel>
                             <FormControl type="date" {...register("dateOfBirth")} />
-                            { errors.dateOfBirth && (
+                            {errors.dateOfBirth && (
                                 <FormText className="text-danger">
                                     {errors.dateOfBirth.message}
                                 </FormText>
-                            ) }
+                            )}
                         </FormGroup>
                     </CardBody>
                     <CardFooter className="text-end">
-                        <Button variant="primary" disabled={!isValid} type="submit"> 
-                            <i className="bi-floppy" /> SAVE 
+                        <Button variant="primary" disabled={!isValid} type="submit">
+                            <i className="bi-floppy" /> SAVE
                         </Button>
                     </CardFooter>
                 </Card>

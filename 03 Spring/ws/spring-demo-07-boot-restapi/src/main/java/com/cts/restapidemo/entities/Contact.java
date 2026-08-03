@@ -44,20 +44,19 @@ public class Contact {
 	@NotNull(message = "Date of Birth is a mandatory field")
 	@PastOrPresent(message = "Date Of Birth can not be a future date")
 	@DateTimeFormat(iso = ISO.DATE)
-	private LocalDate dateOfBith;
+	private LocalDate dateOfBirth;
 	
 	public Contact() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public Contact(Integer contactId, String fullName, String mobileNumber, String meilId, LocalDate dateOfBith) {
+	public Contact(Integer contactId, String fullName, String mobileNumber, String meilId, LocalDate dateOfBirth) {
 		super();
 		this.contactId = contactId;
 		this.fullName = fullName;
 		this.mobileNumber = mobileNumber;
 		this.mailId = meilId;
-		this.dateOfBith = dateOfBith;
+		this.dateOfBirth = dateOfBirth;
 	}
 
 	public Integer getContactId() {
@@ -94,12 +93,12 @@ public class Contact {
 		this.mailId = mailId;
 	}
 
-	public LocalDate getDateOfBith() {
-		return dateOfBith;
+	public LocalDate getDateOfBirth() {
+		return dateOfBirth;
 	}
 
-	public void setDateOfBith(LocalDate dateOfBith) {
-		this.dateOfBith = dateOfBith;
+	public void setDateOfBirth(LocalDate dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 
 	@Override
