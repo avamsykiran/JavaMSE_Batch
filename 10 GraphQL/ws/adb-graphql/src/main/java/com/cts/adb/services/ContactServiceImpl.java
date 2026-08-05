@@ -1,0 +1,54 @@
+package com.cts.adb.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cts.adb.entities.Contact;
+import com.cts.adb.exceptions.ResourceNotFoundException;
+import com.cts.adb.repos.ContactRepo;
+
+@Service
+public class ContactServiceImpl implements ContactService {
+
+	@Autowired
+	private ContactRepo contactRepo;
+	
+	@Override
+	public Contact add(Contact contact) {		
+		return contact==null?null:contactRepo.save(contact);
+	}
+
+	@Override
+	public void deleteById(int contactId) throws ResourceNotFoundException {
+		if(!contactRepo.existsById(contactId)) {
+			throw new ResourceNotFoundException("the requested record is not found and thus cannot be deleted");
+		}
+		contactRepo.deleteById(contactId);
+	}
+
+	@Override
+	public Contact getById(int contactId) {
+		return contactRepo.findById(contactId).orElse(null);
+	}
+
+	@Override
+	public List<Contact> getAll() {
+		return contactRepo.findAll();		
+	}
+
+	@SuppressWarnings("null")
+	@Override
+	public Contact update(Contact contact) {
+		if(contact!=null && contactRepo.existsById(contact.getContactId())) {
+			contact = contactRepo.save(contact);
+		}
+		return contact;
+	}
+
+	@Override
+	public Contact getByMobileNumber(String mobileNumber) {
+		return contactRepo.findByMobileNumber(mobileNumber).orElse(null);
+	}
+}

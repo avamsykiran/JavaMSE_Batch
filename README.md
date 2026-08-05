@@ -53,8 +53,37 @@ Assignment-6: ReactJS Basics
         above the Header component, that shall accept a date-format as an attribute from 
         its parent component, and display the date as per the given format.
 
-Assignment-7: ReactJS react-router, useForm Hook, YUP,  and Global State Managemetn using RTK
+Assignment-7: ReactJS react-router, useForm Hook, YUP,  and Global State Management using RTK
     Develop a ReactJS SPA the does CRUD operations on a AccountHolder entity.
     The AccountHolder has ahId, fullName, mailId, mobileNumber and currentBalance as fields.
     Use Redux Tool Kir Entity Manager for global state management.
     Use react-bootstrap for styling.
+
+Assignment-8: ReactJS using ReduxThunk and axios integrating rest-api
+    Develop a ReactJS SPA the does CRUD operations on a AccountHolder entity.
+    The AccountHolder has ahId, fullName, mailId, mobileNumber and currentBalance as fields.
+    using ReduxThunk and axios , integrate the app with the rest-api. 
+    (use bta-profile microservice from the microservices example step1)
+    
+Case Study:
+    BudgetTrackingApp
+    ------------------------------------------------
+
+    Accounts
+        |<-multiple-> Transactions
+        
+    Links on the navbar
+        /home   that brigns up the customers page.
+
+        Accounts Page is the landing page
+            1. it has to support CRUD operations on accounts
+            4. Against each account record, apart from edit and delete buttons, a statement button is needed 
+                that when clicked will navigate to statement page
+            5. Use a bootstrap model to display account-form for
+                add or edit operations
+
+        Statement page
+            1. Display the list of transaction related to the account selected.
+            2. is the page that supports CRUD operatiosn on transactions
+            
+                

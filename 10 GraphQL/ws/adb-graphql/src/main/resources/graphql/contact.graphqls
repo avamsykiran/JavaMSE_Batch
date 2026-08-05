@@ -1,0 +1,40 @@
+# Custom Scalar mapped via ExtendedScalars.Date
+scalar Date
+
+# Main Contact Object Type
+type Contact {
+    contactId: ID!
+    fullName: String!
+    mobileNumber: String!
+    mailId: String!
+    dateOfBirth: Date!
+}
+
+# Input payload for Creating a new Contact
+input CreateContactInput {
+    fullName: String!
+    mobileNumber: String!
+    mailId: String!
+    dateOfBirth: Date!
+}
+
+# Input payload for Updating an existing Contact (allows partial updates)
+input UpdateContactInput {
+    fullName: String
+    mobileNumber: String
+    mailId: String
+    dateOfBirth: Date
+}
+
+# Queries (Read Operations)
+type Query {
+    contactById(contactId: ID!): Contact
+    allContacts: [Contact!]!
+}
+
+# Mutations (Create, Update, Delete Operations)
+type Mutation {
+    createContact(input: CreateContactInput!): Contact!
+    updateContact(contactId: ID!, input: UpdateContactInput!): Contact!
+    deleteContact(contactId: ID!): Boolean!
+}
