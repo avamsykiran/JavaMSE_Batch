@@ -1187,3 +1187,33 @@ Handle a sequence of api calls - RTK - thunk
 
             we can add extrReducer on addTxnAction.fullfilled   in the txns-sclice   to push txn into state.txns
             we can also add extrReducer on addTxnAction.fullfilled   in the acc-sclice   to change the state.accs[index].currentBal
+
+Authentication and Authorization and Protected Routes
+-------------------------------------------------------
+
+    Protected Routes
+
+        1. Design an H-O-C that varfies the identity and role of a user
+            and will return the child component if verified and allowed
+            or else shall navigate to a error-shown-component.
+
+            ForExample
+                <ProtectedRoute />
+
+        2. Pass this as an element to a route
+        and wrap the targetted component as child.
+
+            <Route element={<ProtectedRoute />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+            </Route>
+
+            <Route element={<ProtectedRoute role="ADMIN"/>}>
+                <Route path="/reports" element={<Reports />} />
+            </Route>
+
+    JWT
+
+        to retrive the subject and claims from the token
+        we use a library: jwt-decode
+
+        npm i jwt-decode
