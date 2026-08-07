@@ -36,10 +36,9 @@ public class JwtFilter extends OncePerRequestFilter {
             
             if (jwtService.isTokenValid(token)) {
                 String username = jwtService.extractUsername(token);
-                String roles = jwtService.extractRoles(token);
-
-                // Convert comma-separated roles from token back into Authorities
-                List<SimpleGrantedAuthority> authorities = Arrays.stream(roles.split(","))
+                List<String> roles = jwtService.extractRoles(token);
+                
+                List<SimpleGrantedAuthority> authorities = roles.stream()
                         .map(SimpleGrantedAuthority::new)
                         .toList();
 

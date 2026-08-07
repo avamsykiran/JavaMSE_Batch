@@ -2,6 +2,7 @@ package com.cts.restapidemo.services;
 import java.security.Key;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -22,12 +23,12 @@ public class JwtService {
     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     public String generateToken(String username, Collection<? extends GrantedAuthority> authorities) {
-        String roles = authorities.stream()
+        List<String> roles = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+                .collect(Collectors.toList());
 
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(username) // Store username in the token
                 .claim("roles", roles) // Store roles in the token
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
@@ -39,8 +40,9 @@ public class JwtService {
         return getClaims(token).getSubject();
     }
 
-    public String extractRoles(String token) {
-        return getClaims(token).get("roles", String.class);
+    @SuppressWarnings("unchecked")
+	public List<String> extractRoles(String token) {
+        return (List<String>) getClaims(token).get("roles", List.class);
     }
 
     public boolean isTokenValid(String token) {

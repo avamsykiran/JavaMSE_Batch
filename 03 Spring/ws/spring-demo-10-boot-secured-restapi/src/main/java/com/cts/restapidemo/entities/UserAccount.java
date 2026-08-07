@@ -37,6 +37,19 @@ public class UserAccount {
     private String roles; // e.g., "ROLE_USER,ROLE_ADMIN"
 
     public UserAccount() {}
+    
+	public UserAccount(Long id,
+			@NotNull(message = "user name can not be empty") @NotBlank(message = "user name can not be empty") String username,
+			@NotNull(message = "password can not be empty") @NotBlank(message = "password can not be empty") String password,
+			@Pattern(regexp = "ROLE_ADMIN|ROLE_USER", message = "role must be any of these two ROLE_ADMIN|ROLE_USER") String roles) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.roles = roles;
+	}
+
+
 
 	public Long getId() {
 		return id;

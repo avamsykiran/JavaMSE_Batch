@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cts.restapidemo.entities.UserAccount;
+import com.cts.restapidemo.exceptions.InvalidRequestBodyException;
 import com.cts.restapidemo.repos.UserRepository;
 
 /*
@@ -41,11 +42,15 @@ public class UserDetailsServiceAndUserAccountServiceImpl implements UserDetailsS
                 .build();
     }
     
-    public UserAccount createUser(UserAccount user) {
+    public UserAccount createUser(UserAccount user) throws InvalidRequestBodyException {
     	 user.setPassword(passwordEncoder.encode(user.getPassword()));
+    	 
          if(user.getRoles()==null) {
          	user.setRoles("ROLE_USER"); // Default role
+         } else if(user.getRoles().equals("ROLE_ADMIN")) {
+        	 throw new InvalidRequestBodyException("ADMIN is not a allowed role to choose, An admin is already created!");
          }
+         
          return userRepository.save(user);
     }
 }

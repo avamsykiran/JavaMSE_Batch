@@ -1,6 +1,7 @@
 package com.cts.restapidemo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,9 +30,14 @@ public class AuthController {
 	
 	@Autowired
 	private AuthenticationManager authManager;
+	
+	public record SignInResponse(String token) {}
+	public record SignUpResponse(String msg) {}
+    public record LoginRequest(String username,String password) {}
+	
 
     @PostMapping("/signup")
-    public String signUp(@RequestBody @Valid UserAccount user,BindingResult bindingResult) throws InvalidRequestBodyException {
+    public ResponseEntity<SignUpResponse> signUp(@RequestBody @Valid UserAccount user,BindingResult bindingResult) throws InvalidRequestBodyException {
     	
     	if(bindingResult.hasErrors()) {
     		throw new InvalidRequestBodyException(bindingResult);
@@ -39,19 +45,17 @@ public class AuthController {
     	
     	userService.createUser(user);
        
-        return "User registered successfully!";
+    	return ResponseEntity.ok(new SignUpResponse("User registered successfully!"));
     }
-
-    public record LoginRequest(String username,String password) {} 
     
     @PostMapping("/signin")
-    public String signIn(@RequestBody LoginRequest request) {
+    public ResponseEntity<SignInResponse> signIn(@RequestBody LoginRequest request) {
         Authentication auth = authManager.authenticate(
             new UsernamePasswordAuthenticationToken(request.username(), request.password())
         );
         
-        return jwtService.generateToken(auth.getName(), auth.getAuthorities());
+        String token = jwtService.generateToken(auth.getName(), auth.getAuthorities());
+        return ResponseEntity.ok(new SignInResponse(token));
     }
    
-
 }

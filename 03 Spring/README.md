@@ -872,7 +872,7 @@ Spring Security - Token Based Authentication - Role Based Authorization
 
     Authorization Archetecture
 
-        Client  --REQ (with-token)  --> JwtFilter <-authentication-> AuthenticationManager <---> UserDetailsService
+        Client  --REQ (with-token)  --> JwtFilter                                              
                                             |
                                             |
                                             ↓
