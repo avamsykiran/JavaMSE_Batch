@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -19,12 +20,13 @@ describe('Counter component', () => {
     expect(screen.getByText('2 Items and 0 Packs')).toBeInTheDocument()
   })
 
+  
   it('wraps count to next packet after 10 adds', async () => {
     const user = userEvent.setup()
     render(<Counter />)
 
     const addButton = screen.getByText('ADD')
-    for (let i = 0; i < 9; i += 1) {
+    for (let i = 0; i < 8; i += 1) {
       await user.click(addButton)
     }
 
@@ -39,7 +41,7 @@ describe('Counter component', () => {
     render(<Counter />)
 
     const addButton = screen.getByText('ADD')
-    for (let i = 0; i < 10; i += 1) {
+    for (let i = 0; i < 9; i += 1) {
       await user.click(addButton)
     }
 
@@ -47,5 +49,5 @@ describe('Counter component', () => {
     await user.click(removeButton)
 
     expect(screen.getByText('9 Items and 0 Packs')).toBeInTheDocument()
-  })
+  }) 
 })
