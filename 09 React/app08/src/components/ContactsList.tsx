@@ -57,7 +57,7 @@ function ContactsList() {
                                         <td>{cx.fullName}</td>
                                         <td>{cx.mobileNumber}</td>
                                         <td>{cx.mailId}</td>
-                                        <td>{cx.dateOfBitth}</td>
+                                        <td>{cx.dateOfBirth}</td>
                                         <td>
                                             <Link to={`/edit/${cx.contactId}`}
                                                 className="btn btn-sm btn-info me-1">

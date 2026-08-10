@@ -91,3 +91,11 @@ Assignment-9: Integrate ReactJS using AppolloClient with GraphQL
     With useQuery , load the contactById in case of edit operation.
     With useMutation, insert or update the contact on form submit.
 
+Assignment-10: Authentication and Autherization
+    Modify the secured-addressbook-ui (app08) application in such a way that
+    (a) only the 'logged in user other than admin' must be able to edit a contact 
+        not an admin or an anonymous user.
+    (b) And the 'delete' button on the ContactsList componenet mus be hidden for 
+        all users, and must be visible for admins.
+
+
